@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDom from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import 'semantic-ui-css/semantic.min.css';
 import Backend from '../api/backend';
@@ -6,13 +7,13 @@ import './PageContent.css'
 
 class PageContent extends React.Component {
 
+
     state = {
         divContent: "",
         updateTime: 0,
         textAreaDisplay: "",
         markdownDisplay: "None"
     }
-
     componentDidMount() {
         //get the latest updates when the page renders
         this.pullDivContent()
@@ -44,7 +45,7 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 1000)
+        setTimeout(this.timers, 500)
     }
 
     pullDivContent = async () => {
@@ -66,27 +67,30 @@ class PageContent extends React.Component {
         if (this.state.textAreaDisplay === "None") {
             this.setState({ textAreaDisplay: "", markdownDisplay: "None" })
         } else {
-            this.setState({ textAreaDisplay: "None", markdownDisplay: "" })
+            this.setState({ textAreaDisplay: "None", markdownDisplay: "" }, () => {
+            })
         }
 
     }
 
     render() {
-        let timer = setTimeout(this.timers, 100)
+        let timer = setTimeout(this.timers, 500)
 
         return (
             <div className="pusher" onDoubleClick={this.toggleTextAreaMarkdown}>
                 <div className="ui fluid icon input" style={{ height: "100vh" }}>
-                    <textarea type="text" style={{display: this.state.textAreaDisplay }} id="mainContentTextArea" />
-                    <div style={{ display: this.state.markdownDisplay, overflowY:"scroll" }} id="markdownArea" >
-                        <ReactMarkdown >
-                            {this.state.divContent}
-                        </ReactMarkdown>
+                    <textarea type="text" style={{ display: this.state.textAreaDisplay }} id="mainContentTextArea" />
+                    <div style={{ display: this.state.markdownDisplay, overflowY: "scroll", all: "none" }} id="markdownArea">
+                        <ReactMarkdown
+                            children={this.state.divContent}
+                        />
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 }
 
 export default PageContent;
+
+
