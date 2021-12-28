@@ -4,14 +4,14 @@ import ProjectOverlay from './ProjectOverlay';
 class MenuBar extends React.Component {
 
     state = {
-        overlay: ""
+        overlay: "None"
     }
 
     toggleProjectsOverlay = () => {
         if (this.state.overlay === "None") {
-            this.state({ overlay: "" })
+            this.setState({ overlay: "" })
         } else {
-            this.state({ overlay: "None"})
+            this.setState({ overlay: "None"})
         }
     }
 
@@ -19,7 +19,7 @@ class MenuBar extends React.Component {
         return (
             <div>
                 <div className="ui secondary  menu" style={{ margin: "2px", zIndex:10099 }}>
-                <a className="item" onClick={this.toggleProjectsOverlay}>
+                <a className="item" onClick={this.toggleProjectsOverlay} >
                         Projects
                     </a>
                     <a className="item">
@@ -40,7 +40,7 @@ class MenuBar extends React.Component {
                         </a>
                     </div>
                 </div>
-                    {/* <ProjectOverlay overlay={this.state.overlay} /> */}
+                    <ProjectOverlay overlay={this.state.overlay} />
             </div>
         )
     }
