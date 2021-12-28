@@ -16,7 +16,7 @@ class PageContent extends React.Component {
     }
     componentDidMount() {
         //get the latest updates when the page renders
-        this.pullDivContent()
+        this.timers()
     }
 
     sendChanges = async () => {
@@ -45,7 +45,7 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 500)
+        setTimeout(this.timers, 250)
     }
 
     pullDivContent = async () => {
@@ -74,7 +74,6 @@ class PageContent extends React.Component {
     }
 
     render() {
-        let timer = setTimeout(this.timers, 500)
 
         return (
             <div className="pusher" onDoubleClick={this.toggleTextAreaMarkdown}>
