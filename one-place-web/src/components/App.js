@@ -7,14 +7,24 @@ import ToolBar from "./toolsPanel/ToolBar";
 import './App.css'
 class App extends React.Component {
 
+    state = {
+        currentProject: {
+            'Title': 'No Project Selected',
+            'id': 'None'
+        }
+    }
+
+    updateProject = (projectDict) => {
+        this.setState({currentProject: projectDict})
+    }
 
     render() {
         return (
             <div style={{}}>
-                <MenuBar/>
+                <MenuBar updateProject={this.updateProject}/>
                 <div id="appArea" className="ui bottom attached segment pushable">
-                    <ProjectBar />
-                    <PageContent />
+                    <ProjectBar currentProject={this.state.currentProject} />
+                    <PageContent currentProject={this.state.currentProject}/>
                     <ToolBar />
                 </div>
             </div>)

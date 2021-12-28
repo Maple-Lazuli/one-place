@@ -10,7 +10,7 @@
 }
 
 #projectholder{
-    background-color: rgba(201, 192, 29, 0.466);
+    background-color: rgba(201, 192, 29, 0.63);
     position: fixed;
     left: 50%;
     top: 50%;
@@ -24,12 +24,10 @@
 #create-projects-div{
     height:10%;
     width:100%;
-    background-color: aqua;
     align:center;
 }
 #access-projects-div{
     height:90%;
-    width:100%;
     padding: 10px;
     
 }
