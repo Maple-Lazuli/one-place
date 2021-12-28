@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import 'semantic-ui-css/semantic.min.css';
-import Backend from '../api/backend';
+import Backend from '../../api/backend';
 import './PageContent.css'
 
 class PageContent extends React.Component {

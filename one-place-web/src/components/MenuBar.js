@@ -1,6 +1,6 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import ProjectOverlay from './ProjectOverlay';
+import ProjectOverlay from './projects/ProjectOverlay';
 class MenuBar extends React.Component {
 
     state = {

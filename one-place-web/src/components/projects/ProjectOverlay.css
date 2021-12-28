@@ -19,4 +19,17 @@
     height: 80vh;
     box-shadow: 5px 10px 150px;
     border-radius: 25px;
+    padding:10px;
+}
+#create-projects-div{
+    height:10%;
+    width:100%;
+    background-color: aqua;
+    align:center;
+}
+#access-projects-div{
+    height:90%;
+    width:100%;
+    padding: 10px;
+    
 }
