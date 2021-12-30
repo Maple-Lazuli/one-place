@@ -19,9 +19,10 @@ class CreateProject extends React.Component {
         const response = await Backend.post(
             '/projects', {
             data: {
-                projectName: this.state.projectName,
-                projectPurpose: this.state.projectPurpose,
-                projectCategory: this.state.projectCategory
+                "projectName": this.state.projectName,
+                "projectPurpose": this.state.projectPurpose,
+                "projectCategory": this.state.projectCategory,
+                "projectCreationTime":Date.now(),       
             }
         });
         this.props.toggleComplete()
@@ -34,7 +35,7 @@ class CreateProject extends React.Component {
         this.setState({ projectName: document.getElementById("project-name").value })
     }
     updateCategory = () => {
-        this.setState({ projectName: document.getElementById("category").value })
+        this.setState({ projectCategory: document.getElementById("category").value })
     }
 
     render() {

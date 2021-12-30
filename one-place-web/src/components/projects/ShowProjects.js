@@ -7,7 +7,7 @@ class ShowProjects extends React.Component {
     populateGrid = () => {
         let projects = [];
         for (let i = 0; i < this.props.projectList.length; i++) {
-            projects.push(<ProjectCard key={i} projectDict={this.props.projectList[i]} updateProject={this.props.updateProject}/>)
+            projects.push(<ProjectCard key={i} projectDict={this.props.projectList[i]} updateProject={this.props.updateProject} refreshProjects = {this.props.refreshProjects}/>)
         }
         return projects
     }
