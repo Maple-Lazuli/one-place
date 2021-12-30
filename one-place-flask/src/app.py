@@ -30,9 +30,9 @@ def get_projects():
 def create_project():
     global content_dict
     template = cnst.project_dict.copy()
-    template['title'] = request.json['data']['projectName']
-    template['purpose'] = request.json['data']['projectPurpose']
-    template['category'] = request.json['data']['projectCategory']
+    template['title'] = request.json['data']['projectName'].strip()
+    template['purpose'] = request.json['data']['projectPurpose'].strip()
+    template['category'] = request.json['data']['projectCategory'].strip()
     template['creation_date'] = request.json['data']['projectCreationTime']
     prehash = template['title'] + str(template['creation_date'])
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()

@@ -2,6 +2,7 @@ project_dict = {
     "title": None,
     "purpose": None,
     "category": None,
+    "content": None,
     "creation_date": None,
     "id": None,
     "pages": {},

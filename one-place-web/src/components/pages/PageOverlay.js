@@ -1,16 +1,16 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import './ProjectOverlay.css'
-import CreateProject from './CreateProject'
-import ShowProjects from './ShowProjects'
+import '../projects/ProjectOverlay.css'
+import CreatePage from './CreatePage'
+import ShowPages from './ShowPages'
 
 import Backend from "../../api/backend"
-class ProjectOverlay extends React.Component {
+class PagesOverlay extends React.Component {
 
     state = {
         createProjectDisplay: "None",
         showProjectsDisplay: "None",
-        projectList: []
+        pageList: []
     }
 
     componentDidMount() {
@@ -63,10 +63,10 @@ class ProjectOverlay extends React.Component {
                     </div>
                     <div id='access-projects-div'>
                         <div style={{ display: this.state.createProjectDisplay }}>
-                            <CreateProject toggleComplete={this.toggleCreateProject} />
+                            <CreatePage toggleComplete={this.toggleCreateProject} />
                         </div>
                         <div style={{ display: this.state.showProjectsDisplay}}>
-                            <ShowProjects projectList={this.state.projectList} updateProject={this.props.updateProject} refreshProjects={this.fetchProjects}/>
+                            <ShowPages projectList={this.state.projectList} updateProject={this.props.updateProject} refreshProjects={this.fetchProjects}/>
                         </div>
                     </div>
                 </div>
@@ -75,4 +75,4 @@ class ProjectOverlay extends React.Component {
     }
 }
 
-export default ProjectOverlay;
+export default PagesOverlay;

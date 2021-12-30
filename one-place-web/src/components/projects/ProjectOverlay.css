@@ -1,4 +1,4 @@
-#shader{
+.shader{
     background-color: rgba(112, 108, 53, 0.4);
     position: fixed;
     left: 50%;
@@ -6,10 +6,10 @@
     transform: translate(-50%, -50%);
     width: 100vw;
     height: 90vh;
-    z-index: 99;
+    z-index: 999;
 }
 
-#projectholder{
+.projectholder{
     background-color: rgba(201, 192, 29, 0.63);
     position: fixed;
     left: 50%;
@@ -29,5 +29,6 @@
 #access-projects-div{
     height:90%;
     padding: 10px;
+    overflow: scroll;
     
 }
