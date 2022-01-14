@@ -16,10 +16,10 @@ class CreatePage extends React.Component {
     sendNewProject = async (e) => {
         e.preventDefault();
         const response = await Backend.post(
-            '/projects', {
+            '/pages', {
             data: {
                 "pageName": this.state.pageName,
-                "pageParent": this.state.pageParent,
+                "pageParent": this.props.currentProject.id,
                 "pageCreationTime": Date.now(),
             }
         });
@@ -27,10 +27,7 @@ class CreatePage extends React.Component {
     }
 
     updateTitle = () => {
-        this.setState({ projectName: document.getElementById("page-name").value })
-    }
-    updateParent = () => {
-        this.setState({ pageParent: document.getElementById("page-name").value })
+        this.setState({ pageName: document.getElementById("page-name").value })
     }
 
 
@@ -38,11 +35,7 @@ class CreatePage extends React.Component {
         return (
             <form className="ui form" onSubmit={this.preventDefaultAction}>
                 <div className="field">
-                    <label>Parent</label>
-                    <input type="text" id='category' name="category" placeholder="Category" onChange={this.updateParent} />
-                </div>
-                <div className="field">
-                    <label>Project Title</label>
+                    <label>Page Name</label>
                     <input type="text" id="page-name" name="page-name" placeholder="Page Name" onChange={this.updateTitle} />
                 </div>
                 <button className="ui button" type="submit" onClick={this.sendNewProject}>Submit</button>

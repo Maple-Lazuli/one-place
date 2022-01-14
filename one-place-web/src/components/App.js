@@ -21,7 +21,7 @@ class App extends React.Component {
     render() {
         return (
             <div style={{}}>
-                <MenuBar updateProject={this.updateProject}/>
+                <MenuBar updateProject={this.updateProject} currentProject={this.state.currentProject}/>
                 <div id="appArea" className="ui bottom attached segment pushable">
                     <ProjectBar currentProject={this.state.currentProject} />
                     <PageContent currentProject={this.state.currentProject}/>

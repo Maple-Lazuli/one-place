@@ -13,26 +13,30 @@ class MenuBar extends React.Component {
         if (this.state.overlay === "None") {
             this.setState({ overlay: "" })
         } else {
-            this.setState({ overlay: "None"})
+            this.setState({ overlay: "None" })
         }
     }
 
-    togglePageOverlay = () => {
-        if (this.state.pageoverlay === "None") {
-            this.setState({ pageoverlay: "" })
+    togglePagesOverlay = () => {
+        if (this.props.currentProject.id === "None") {
+            alert("Select a project First")
         } else {
-            this.setState({ pageoverlay: "None"})
+            if (this.state.pageoverlay === "None") {
+                this.setState({ pageoverlay: "" })
+            } else {
+                this.setState({ pageoverlay: "None" })
+            }
         }
+
     }
 
     render() {
         return (
             <div>
-                <div className="ui secondary  menu" style={{ margin: "2px", zIndex:10099 }}>
-                <a className="item" onClick={this.toggleProjectsOverlay} >
+                <div className="ui secondary  menu" style={{ margin: "2px", zIndex: 10099 }}>
+                    <a className="item" onClick={this.toggleProjectsOverlay} >
                         Projects
                     </a>
-
                     <a className="item" onClick={this.togglePagesOverlay} >
                         Pages
                     </a>
@@ -54,8 +58,8 @@ class MenuBar extends React.Component {
                         </a>
                     </div>
                 </div>
-                    <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject}/>
-                    <PagesOverlay overlay={this.state.pageoverlay} />
+                <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject} />
+                <PagesOverlay overlay={this.state.pageoverlay} currentProject= {this.props.currentProject}/>
             </div>
         )
     }

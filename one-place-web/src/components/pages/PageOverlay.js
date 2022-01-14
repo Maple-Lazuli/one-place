@@ -10,7 +10,7 @@ class PagesOverlay extends React.Component {
     state = {
         createProjectDisplay: "None",
         showProjectsDisplay: "None",
-        pageList: []
+        pageList: [],
     }
 
     componentDidMount() {
@@ -45,28 +45,28 @@ class PagesOverlay extends React.Component {
                     <div id='create-projects-div'>
                         <div className="ui grid">
                             <div className="eight wide column">
-                                <button className="ui button small" onClick={this.toggleCreateProject}>Create Project</button>
+                                <button className="ui button small" onClick={this.toggleCreateProject}>Create Page</button>
                             </div>
                             <div className="four wide column">
                                 <div className="ui label large">
-                                    Projects
-                                    <div className="detail">214</div>
+                                    Pages
+                                    <div className="detail">343</div>
                                 </div>
                             </div>
                             <div className="four wide column">
                                 <div className="ui label large">
                                     Last Updated
-                                    <div className="detail">214</div>
+                                    <div className="detail">316</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div id='access-projects-div'>
                         <div style={{ display: this.state.createProjectDisplay }}>
-                            <CreatePage toggleComplete={this.toggleCreateProject} />
+                            <CreatePage toggleComplete={this.toggleCreateProject} currentProject={this.props.currentProject} />
                         </div>
                         <div style={{ display: this.state.showProjectsDisplay}}>
-                            <ShowPages projectList={this.state.projectList} updateProject={this.props.updateProject} refreshProjects={this.fetchProjects}/>
+                            <ShowPages projectList={this.state.pageList} updateProject={this.props.updateProject} refreshProjects={this.fetchProjects}/>
                         </div>
                     </div>
                 </div>
