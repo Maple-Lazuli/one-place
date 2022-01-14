@@ -6,8 +6,8 @@ class ShowPages extends React.Component {
 
     populateGrid = () => {
         let projects = [];
-        for (let i = 0; i < this.props.projectList.length; i++) {
-            projects.push(<PageCard key={i} projectDict={this.props.projectList[i]} updateProject={this.props.updateProject} refreshProjects = {this.props.refreshProjects}/>)
+        for (let i = 0; i < this.props.pageList.length; i++) {
+            projects.push(<PageCard key={i} pageDict={this.props.pageList[i]} updatePage={this.props.updatePage} refreshPages = {this.props.refreshPages}/>)
         }
         return projects
     }

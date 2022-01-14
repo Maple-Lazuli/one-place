@@ -59,7 +59,7 @@ class MenuBar extends React.Component {
                     </div>
                 </div>
                 <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject} />
-                <PagesOverlay overlay={this.state.pageoverlay} currentProject= {this.props.currentProject}/>
+                <PagesOverlay overlay={this.state.pageoverlay} currentProject= {this.props.currentProject} updatePage={this.props.updatePage}/>
             </div>
         )
     }

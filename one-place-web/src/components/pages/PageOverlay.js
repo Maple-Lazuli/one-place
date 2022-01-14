@@ -8,32 +8,34 @@ import Backend from "../../api/backend"
 class PagesOverlay extends React.Component {
 
     state = {
-        createProjectDisplay: "None",
-        showProjectsDisplay: "None",
+        createPageDisplay: "None",
+        showPagesDisplay: "",
         pageList: [],
     }
 
     componentDidMount() {
-        this.fetchProjects()
+        this.fetchPages()
     }
 
-    fetchProjects = async () => {
-        const response = await Backend.get(
-            '/projects', {
-            params: {}
-        });
-        this.setState({ projectList: response.data['projects'] }, () => {
-            this.setState({showProjectsDisplay: ""}, () =>{
+    fetchPages = async () => {
+        if (this.props.currentProject['id'] !== "None") {
+            const response = await Backend.get(
+                '/pages', {
+                params: { "id": this.props.currentProject['id'] }
+            });
+            this.setState({ pageList: response.data['pages'] }, () => {
+                this.setState({ showPagesDisplay: "" }, () => {
+                })
             })
-        })
+        }
     }
 
-    toggleCreateProject = () => {
-        if (this.state.createProjectDisplay === 'None') {
-            this.setState({ createProjectDisplay: "", showProjectsDisplay: "None" })
+    toggleCreatePage = () => {
+        if (this.state.createPageDisplay === 'None') {
+            this.setState({ createPageDisplay: "", showPagesDisplay: "None" })
         } else {
-            this.setState({ createProjectDisplay: "None" })
-            this.fetchProjects()
+            this.setState({ createPageDisplay: "None" })
+            this.fetchPages()
 
         }
     }
@@ -45,7 +47,7 @@ class PagesOverlay extends React.Component {
                     <div id='create-projects-div'>
                         <div className="ui grid">
                             <div className="eight wide column">
-                                <button className="ui button small" onClick={this.toggleCreateProject}>Create Page</button>
+                                <button className="ui button small" onClick={this.toggleCreatePage}>Create Page</button>
                             </div>
                             <div className="four wide column">
                                 <div className="ui label large">
@@ -62,11 +64,12 @@ class PagesOverlay extends React.Component {
                         </div>
                     </div>
                     <div id='access-projects-div'>
-                        <div style={{ display: this.state.createProjectDisplay }}>
-                            <CreatePage toggleComplete={this.toggleCreateProject} currentProject={this.props.currentProject} />
+                        <div style={{ display: this.state.createPageDisplay }}>
+                        {/* Use current project for the id to assign the page too */}
+                            <CreatePage toggleComplete={this.toggleCreatePage} currentProject={this.props.currentProject} /> 
                         </div>
-                        <div style={{ display: this.state.showProjectsDisplay}}>
-                            <ShowPages projectList={this.state.pageList} updateProject={this.props.updateProject} refreshProjects={this.fetchProjects}/>
+                        <div style={{ display: this.state.showPagesDisplay }}>
+                            <ShowPages pageList={this.state.pageList} updatePage={this.props.updatePage} refreshPages={this.fetchPages} />
                         </div>
                     </div>
                 </div>
