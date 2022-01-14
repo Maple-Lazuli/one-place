@@ -72,6 +72,29 @@ def update_current():
         print(f'Message update {message} at {last_update}')
     return Response("Ok", status=200, mimetype='application/json')
 
+@app.route("/pages", methods=["POST"])
+def create_page():
+    global content_dict
+    template = cnst.page_dict.copy()
+    template['title'] = request.json['data']['pageName'].strip()
+    template['creation_date'] = request.json['data']['pageCreationTime']
+    prehash = template['title'] + str(template['creation_date'])
+    template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    parent_project = content_dict.get(request.json['data']['pageParent'])
+    parent_project['pages'].update({template['id']: template})
+    print(f'Recieved New Page {template["title"]} for  {parent_project["title"]}')
+    return Response("Okay", status=200, mimetype='application/json')
+
+@app.route("/pages", methods=["GET"])
+def get_pages():
+    global content_dict
+    parent_id = request.args.get('id')
+    parent = content_dict.get(parent_id)
+    pages_dict = parent['pages']
+    return_json = {"pages": [pages_dict.get(key) for key in pages_dict.keys()]}
+    return Response(json.dumps(return_json), status=200, mimetype='application/json')
+
+
 
 def main():
     app.run(host='0.0.0.0', port=3001)
