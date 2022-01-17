@@ -32,7 +32,6 @@ files_dict = {
     "upload_date": None,
     "id": None
 }
-
 data_path = '../data/v1/'
-
 v1_name = "content.pkl"
+images = data_path+"images/"

@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, send_file
 from flask_cors import CORS
 import time
 import json
@@ -48,7 +48,7 @@ def create_project():
     prehash = template['title'] + str(template['creation_date'])
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     content_dict.update({template['id']: template})
-    print(f'Recieved New Project {template["title"]}')
+    print(f'Received New Project {template["title"]}')
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 
@@ -121,6 +121,25 @@ def get_pages():
     pages_dict = parent['pages']
     return_json = {"pages": [pages_dict.get(key) for key in pages_dict.keys()]}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
+
+
+##image upload
+@app.route("/images", methods=["POST"])
+def save_image():
+    file = request.files['image']
+    prehash = str(time.time()) + file.filename
+    file_name = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    file.save(os.path.join(cnst.images, file_name + ".png"))
+    print(file_name)
+    print(len(file_name))
+    return Response(json.dumps({'image': file_name}), status=200, mimetype='application/json')
+
+##image upload
+@app.route("/images", methods=["GET"])
+def get_image():
+    image_name = request.args.get('image')
+    image_name
+    return send_file(cnst.images + image_name + '.png', mimetype='image/png')
 
 
 def save_data(data):
