@@ -11,9 +11,10 @@ class PageCard extends React.Component {
     deletePage = async () => {
         const response = await Backend.get(
         '/delete', {
-            params: { "id":this.props.pageDict['id'] }
+            params: { "id":this.props.pageDict['id']}
         });
         this.props.refreshPages()
+        this.props.refreshProject()
     }
 
 render() {

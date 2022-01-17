@@ -16,7 +16,7 @@ class PagesOverlay extends React.Component {
     componentDidMount() {
         this.fetchPages()
     }
-
+    // To get this to work properly, update the page list when a project is selected
     fetchPages = async () => {
         if (this.props.currentProject['id'] !== "None") {
             const response = await Backend.get(
@@ -66,10 +66,10 @@ class PagesOverlay extends React.Component {
                     <div id='access-projects-div'>
                         <div style={{ display: this.state.createPageDisplay }}>
                         {/* Use current project for the id to assign the page too */}
-                            <CreatePage toggleComplete={this.toggleCreatePage} currentProject={this.props.currentProject} /> 
+                            <CreatePage toggleComplete={this.toggleCreatePage} currentProject={this.props.currentProject} refreshProject={this.props.refreshProject}/> 
                         </div>
                         <div style={{ display: this.state.showPagesDisplay }}>
-                            <ShowPages pageList={this.state.pageList} updatePage={this.props.updatePage} refreshPages={this.fetchPages} />
+                            <ShowPages pageList={this.state.pageList} updatePage={this.props.updatePage} refreshPages={this.fetchPages} refreshProject={this.props.refreshProject}/>
                         </div>
                     </div>
                 </div>

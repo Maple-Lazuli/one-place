@@ -23,6 +23,7 @@ class CreatePage extends React.Component {
                 "pageCreationTime": Date.now(),
             }
         });
+        this.props.refreshProject()
         this.props.toggleComplete()
     }
 

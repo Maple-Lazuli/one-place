@@ -5,11 +5,11 @@ import PageCard from './PageCard'
 class ShowPages extends React.Component {
 
     populateGrid = () => {
-        let projects = [];
+        let pages = [];
         for (let i = 0; i < this.props.pageList.length; i++) {
-            projects.push(<PageCard key={i} pageDict={this.props.pageList[i]} updatePage={this.props.updatePage} refreshPages = {this.props.refreshPages}/>)
+            pages.push(<PageCard key={i} pageDict={this.props.pageList[i]} updatePage={this.props.updatePage} refreshPages = {this.props.refreshPages} refreshProject={this.props.refreshProject}/>)
         }
-        return projects
+        return pages
     }
 
     render() {

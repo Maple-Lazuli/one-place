@@ -25,6 +25,14 @@ def get_projects():
     return_json = {"projects": [content_dict.get(key) for key in content_dict.keys()]}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
+@app.route("/project", methods=["GET"])
+def get_project():
+    global content_dict
+    project_id = request.args.get('id')
+    project = content_dict.get(project_id)
+    return_json = {"project": project}
+    return Response(json.dumps(return_json), status=200, mimetype='application/json')
+
 
 @app.route("/projects", methods=["POST"])
 def create_project():
@@ -44,7 +52,13 @@ def create_project():
 def delete_project():
     global content_dict
     id_to_remove = request.args.get('id')
-    content_dict.pop(id_to_remove)
+    if id_to_remove in content_dict.keys():
+        content_dict.pop(id_to_remove)
+    else:
+        for key in content_dict.keys():
+            project = content_dict.get(key)
+            if id_to_remove in project['pages'].keys():
+                project['pages'].pop(id_to_remove)
 
     return Response(id_to_remove, status=200, mimetype='application/json')
 
