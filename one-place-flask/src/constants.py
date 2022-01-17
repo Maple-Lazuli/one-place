@@ -13,7 +13,8 @@ page_dict = {
     "title": None,
     "creation_date": None,
     "id": None,
-    "content":None,
+    "content": None,
+    "lastUpdate": 0,
     "pages": {},
     "code_snippets": {}
 }
@@ -31,3 +32,7 @@ files_dict = {
     "upload_date": None,
     "id": None
 }
+
+data_path = '../data/v1/'
+
+v1_name = "content.pkl"

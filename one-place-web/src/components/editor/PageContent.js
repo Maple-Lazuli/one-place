@@ -10,7 +10,6 @@ class PageContent extends React.Component {
 
     state = {
         divContent: "",
-        updateTime: 0,
         textAreaDisplay: "",
         markdownDisplay: "None"
     }
@@ -21,20 +20,25 @@ class PageContent extends React.Component {
 
     sendChanges = async () => {
         //Sends update request to the server containing the timestamp and update
-        const response = await Backend.post(
-            '/updates', {
-            data: {
-                divContent: this.state.divContent,
-                time: this.state.updateTime
-            }
-        });
+        if (this.props.currentPage['id'] !== "None") {
+            const response = await Backend.post(
+                '/updates', {
+                data: {
+                    divContent: this.state.divContent,
+                    time: this.props.lastUpdate,
+                    parentID: this.props.currentProject['id'],
+                    pageID: this.props.currentPage['id']
+                }
+            });
+        }
     }
 
     updateDivContent = () => {
         // Determine if an update needs to be sent to the server
         let current_content = document.getElementById('mainContentTextArea').value
         if (this.state.divContent !== current_content) {
-            this.setState({ divContent: current_content, updateTime: Date.now() }, () => {
+            this.props.updatePageTime(Date.now())
+            this.setState({ divContent: current_content}, () => {
                 this.sendChanges()
             })
         }
@@ -45,21 +49,27 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 1000)
+        setTimeout(this.timers, 500)
     }
 
     pullDivContent = async () => {
         //Query Server For updates
-        const response = await Backend.get(
-            '/updates', {
-            params: {}
-        });
-        if (this.state.updateTime < response.data.updateTime) {
-            this.setState({ divContent: response.data.content, updateTime: response.data.updateTime }, () => {
-                document.getElementById("mainContentTextArea").value = response.data.content
-            })
-        }
-        if (response.status !== 200) {
+        if (this.props.currentPage['id'] !== "None") {
+            const response = await Backend.get(
+                '/updates', {
+                params: {
+                    parentID: this.props.currentProject['id'],
+                    pageID: this.props.currentPage['id']
+                }
+            });
+            if (this.props.lastUpdate <= response.data.updateTime) {
+                this.props.updatePageTime(response.data.updateTime)
+                this.setState({ divContent: response.data.content}, () => {
+                    document.getElementById("mainContentTextArea").value = response.data.content
+                })
+            }
+            if (response.status !== 200) {
+            }
         }
     }
 
@@ -78,7 +88,7 @@ class PageContent extends React.Component {
         return (
             <div className="pusher" onDoubleClick={this.toggleTextAreaMarkdown}>
                 <div className="ui fluid icon input" style={{ height: "100vh" }}>
-                    <textarea type="text" style={{ display: this.state.textAreaDisplay }} id="mainContentTextArea" />
+                    <textarea type="text" spellCheck="true" style={{ display: this.state.textAreaDisplay }} id="mainContentTextArea" />
                     <div style={{ display: this.state.markdownDisplay, overflowY: "scroll", all: "none" }} id="markdownArea">
                         <ReactMarkdown
                             children={this.state.divContent}

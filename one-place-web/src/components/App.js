@@ -16,12 +16,17 @@ class App extends React.Component {
         },
         currentPage: {
             'Title': 'No Page Selected',
-            'id': 'None'
-        }
+            'id': 'None',
+        },
+        lastUpdate: 0
     }
 
     updateProject = (projectDict) => {
         this.setState({currentProject: projectDict})
+    }
+
+    updatePageTime = (time) => {
+        this.setState({lastUpdate: time})
     }
 
     refreshProject = async () => {
@@ -35,7 +40,7 @@ class App extends React.Component {
     }
 
     updatePage = (pageDict) => {
-        this.setState({currentPage: pageDict})
+        this.setState({currentPage: pageDict, lastUpdate: pageDict['lastUpdate']})
     }
 
     render() {
@@ -44,7 +49,7 @@ class App extends React.Component {
                 <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject}/>
                 <div id="appArea" className="ui bottom attached segment pushable">
                     <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage}/>
-                    <PageContent currentProject={this.state.currentProject}/>
+                    <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate}/>
                     <ToolBar />
                 </div>
             </div>)
