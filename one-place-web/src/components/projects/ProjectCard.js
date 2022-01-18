@@ -6,6 +6,7 @@ class ProjectCard extends React.Component {
 
     selectProject = () => {
         this.props.updateProject(this.props.projectDict)
+        this.props.toggleProjectsOverlay()
     }
 
     deleteProject = async () => {
@@ -30,9 +31,11 @@ render() {
                     {this.props.projectDict['purpose']}
                 </div>
                 <div className="extra content">
-                    <div className="ui two buttons">
+                    <div className="ui three buttons">
                         <div className="ui basic green button" onClick={this.selectProject}>Open</div>
+                        <div className="ui basic yellow button" onClick={this.modifyProject}>Modify</div>
                         <div className="ui basic red button" onClick={this.deleteProject}>Delete</div>
+
                     </div>
                 </div>
             </div>

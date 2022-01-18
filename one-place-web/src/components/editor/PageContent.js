@@ -101,7 +101,6 @@ class PageContent extends React.Component {
             const element = document.getElementById("mainContentTextArea")
             const startPos = element.selectionStart
             const endPos =  element.selectionEnd
-
             if (startPos || endPos == '0') {
                 element.value = element.value.substring(0, startPos)
                     + "![image](http://localhost:3001/images?image=" + hash + ")"

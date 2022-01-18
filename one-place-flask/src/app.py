@@ -123,7 +123,6 @@ def get_pages():
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
 
-##image upload
 @app.route("/images", methods=["POST"])
 def save_image():
     file = request.files['image']
@@ -134,7 +133,7 @@ def save_image():
     print(len(file_name))
     return Response(json.dumps({'image': file_name}), status=200, mimetype='application/json')
 
-##image upload
+
 @app.route("/images", methods=["GET"])
 def get_image():
     image_name = request.args.get('image')

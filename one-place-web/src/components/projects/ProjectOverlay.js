@@ -66,7 +66,10 @@ class ProjectOverlay extends React.Component {
                             <CreateProject toggleComplete={this.toggleCreateProject} />
                         </div>
                         <div style={{ display: this.state.showProjectsDisplay}}>
-                            <ShowProjects projectList={this.state.projectList} updateProject={this.props.updateProject} refreshProjects={this.fetchProjects}/>
+                            <ShowProjects projectList={this.state.projectList} 
+                            updateProject={this.props.updateProject} 
+                            refreshProjects={this.fetchProjects}
+                            toggleProjectsOverlay={this.props.toggleProjectsOverlay}/>
                         </div>
                     </div>
                 </div>
