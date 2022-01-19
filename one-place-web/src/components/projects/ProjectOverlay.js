@@ -2,6 +2,8 @@ import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import './ProjectOverlay.css'
 import CreateProject from './CreateProject'
+import ModifyProject from './ModifyProject'
+
 import ShowProjects from './ShowProjects'
 
 import Backend from "../../api/backend"
@@ -10,7 +12,15 @@ class ProjectOverlay extends React.Component {
     state = {
         createProjectDisplay: "None",
         showProjectsDisplay: "None",
-        projectList: []
+        modifyProjectDisplay: "None",
+        projectList: [],
+        modifyIndex: -1,
+        modifyProject: {
+            title: "",
+            category: "",
+            id: "",
+            purpose: ""
+        }
     }
 
     componentDidMount() {
@@ -23,20 +33,36 @@ class ProjectOverlay extends React.Component {
             params: {}
         });
         this.setState({ projectList: response.data['projects'] }, () => {
-            this.setState({showProjectsDisplay: ""}, () =>{
+            this.setState({ showProjectsDisplay: "" }, () => {
             })
         })
     }
 
     toggleCreateProject = () => {
         if (this.state.createProjectDisplay === 'None') {
-            this.setState({ createProjectDisplay: "", showProjectsDisplay: "None" })
+            this.setState({ createProjectDisplay: "", showProjectsDisplay: "None", modifyProjectDisplay: "None" })
         } else {
             this.setState({ createProjectDisplay: "None" })
             this.fetchProjects()
 
         }
     }
+
+    toggleModifyProject = () => {
+        if (this.state.modifyProjectDisplay === 'None') {
+            this.setState({ modifyProjectDisplay: "", showProjectsDisplay: "None", createProjectDisplay: "None" })
+        } else {
+            this.setState({ modifyProjectDisplay: "None" })
+            this.fetchProjects()
+        }
+    }
+    setModify = (index, project) => {
+        this.setState({ modifyIndex: index, modifyProject: project }, () => {
+            this.toggleModifyProject()
+        })
+
+    }
+
 
     render() {
         return (
@@ -65,11 +91,16 @@ class ProjectOverlay extends React.Component {
                         <div style={{ display: this.state.createProjectDisplay }}>
                             <CreateProject toggleComplete={this.toggleCreateProject} />
                         </div>
-                        <div style={{ display: this.state.showProjectsDisplay}}>
-                            <ShowProjects projectList={this.state.projectList} 
-                            updateProject={this.props.updateProject} 
-                            refreshProjects={this.fetchProjects}
-                            toggleProjectsOverlay={this.props.toggleProjectsOverlay}/>
+                        <div style={{ display: this.state.modifyProjectDisplay }}>
+                            <ModifyProject toggleModifyProject={this.toggleModifyProject} project={this.state.modifyProject} modifyIndex={this.state.modifyIndex} />
+                        </div>
+                        <div style={{ display: this.state.showProjectsDisplay }}>
+                            <ShowProjects projectList={this.state.projectList}
+                                updateProject={this.props.updateProject}
+                                refreshProjects={this.fetchProjects}
+                                toggleProjectsOverlay={this.props.toggleProjectsOverlay}
+                                setModify={this.setModify}
+                                 />
                         </div>
                     </div>
                 </div>

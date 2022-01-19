@@ -50,7 +50,6 @@ class App extends React.Component {
                 <div id="appArea" className="ui bottom attached segment pushable">
                     <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage}/>
                     <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate}/>
-                    <ToolBar />
                 </div>
             </div>)
     }

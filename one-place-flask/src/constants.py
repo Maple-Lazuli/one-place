@@ -11,6 +11,7 @@ project_dict = {
 
 page_dict = {
     "title": None,
+    "position": 0,
     "creation_date": None,
     "id": None,
     "content": None,

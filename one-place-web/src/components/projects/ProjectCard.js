@@ -17,6 +17,11 @@ class ProjectCard extends React.Component {
         this.props.refreshProjects()
     }
 
+    modifyProject = () => {
+        this.props.setModify(this.props.index, this.props.projectDict)
+        
+    }
+
 render() {
     return (
         <div className="card">

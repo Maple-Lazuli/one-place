@@ -10,10 +10,6 @@ import constants as cnst
 
 app = Flask(__name__)
 CORS(app)
-
-# message = ""
-# last_update = 0
-
 content_dict = None
 
 
@@ -27,14 +23,6 @@ def get_projects():
     return_json = {"projects": [content_dict.get(key) for key in content_dict.keys()]}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
-
-@app.route("/project", methods=["GET"])
-def get_project():
-    global content_dict
-    project_id = request.args.get('id')
-    project = content_dict.get(project_id)
-    return_json = {"project": project}
-    return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
 
 @app.route("/projects", methods=["POST"])
@@ -52,6 +40,22 @@ def create_project():
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 
+
+@app.route("/project", methods=["GET"])
+def get_project():
+    global content_dict
+    project_id = request.args.get('id')
+    project = content_dict.get(project_id)
+    return_json = {"project": project}
+    return Response(json.dumps(return_json), status=200, mimetype='application/json')
+
+@app.route("/project", methods=["POST"])
+def get_project():
+    global content_dict
+    project_id = request.args.get('id')
+    project = content_dict.get(project_id)
+    project['title'] = request.args.get('id')
+    return Response(json.dumps({'status': 'ok'}), status=200, mimetype='application/json')
 
 @app.route("/delete", methods=["GET"])
 def delete_project():
