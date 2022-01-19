@@ -50,7 +50,7 @@ def get_project():
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
 @app.route("/project", methods=["POST"])
-def get_project():
+def update_project():
     global content_dict
     project_id = request.args.get('id')
     project = content_dict.get(project_id)

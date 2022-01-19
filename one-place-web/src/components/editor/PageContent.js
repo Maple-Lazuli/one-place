@@ -4,6 +4,11 @@ import ReactMarkdown from 'react-markdown';
 import 'semantic-ui-css/semantic.min.css';
 import Backend from '../../api/backend';
 import './PageContent.css'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+
+import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for you
+
 
 class PageContent extends React.Component {
 
@@ -49,7 +54,7 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 500)
+        setTimeout(this.timers, 1000)
     }
 
     pullDivContent = async () => {
@@ -118,9 +123,11 @@ class PageContent extends React.Component {
             <div className="pusher" onDoubleClick={this.toggleTextAreaMarkdown}>
                 <div className="ui fluid icon input" style={{ height: "100vh"}}>
                     <textarea type="text" spellCheck="true" style={{ display: this.state.textAreaDisplay }} id="mainContentTextArea" onPaste={this.uploadImage} />
-                    <div style={{ display: this.state.markdownDisplay, overflowY: "scroll", all: "none" }} id="markdownArea">
+                    <div style={{ display: this.state.markdownDisplay, overflowY: "scroll" }} id="markdownArea">
                         <ReactMarkdown
                             children={this.state.divContent}
+                            remarkPlugins={[remarkMath]}
+                            rehypePlugins={[rehypeKatex]}
                         />
                     </div>
                 </div>
