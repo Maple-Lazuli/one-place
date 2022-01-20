@@ -5,7 +5,7 @@ import Backend from '../../api/backend'
 class CodeSnippetCard extends React.Component {
 
     selectSnippet = () => {
-        this.props.updatePage(this.props.pageDict)
+        this.props.setCurrentSnippet(this.props.snippet)
     }
 
     deleteSnippet = async () => {

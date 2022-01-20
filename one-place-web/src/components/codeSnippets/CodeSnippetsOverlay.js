@@ -4,21 +4,53 @@ import 'semantic-ui-css/semantic.min.css';
 import Backend from "../../api/backend"
 import CreateCodeSnippet from "./CreateCodeSnippet"
 import CodeSnippetCard from "./CodeSnippetCard"
+import ViewCodeSnippet from './ViewCodeSnippet';
 class CodeSnippetsOverlay extends React.Component {
 
     state = {
         displaySnippets: "",
         displayCreateSnippet: "None",
         displayModifySnippet: "None",
-        displaySnippet: "None"
-
+        displaySnippet: "None",
+        currentSnippet: {
+            marked: ""
+        }
     }
 
     completeCreation = () => {
-        this.setState({ displayCreateSnippet: "None" })
+        this.setState({
+            displayCreateSnippet: "None",
+            displaySnippets: "",
+            displaySnippet: "None"
+        })
     }
     showCreateSnippet = () => {
-        this.setState({ displayCreateSnippet: "" })
+        if (this.state.displayCreateSnippet !== "None") {
+            this.completeCreation()
+        } else {
+            this.setState({
+                displayCreateSnippet: "",
+                displaySnippets: "None",
+                displaySnippet: "None"
+            })
+        }
+    }
+
+    setCurrentSnippet = (snippet) => {
+        this.setState({
+            currentSnippet: snippet,
+            displayCreateSnippet: "None",
+            displaySnippets: "None",
+            displaySnippet: ""
+        })
+    }
+
+    closeSnippet = () => {
+        this.setState({
+            displayCreateSnippet: "None",
+            displaySnippets: "",
+            displaySnippet: "None"
+        })
     }
 
     populateGrid = () => {
@@ -28,6 +60,7 @@ class CodeSnippetsOverlay extends React.Component {
         for (const [key, value] of Object.entries(this.props.currentPage['code_snippets'])) {
             snippets.push(<CodeSnippetCard key={i++}
                 refreshPage={this.props.refreshPage}
+                setCurrentSnippet={this.setCurrentSnippet}
                 snippet={value} />)
         }
         return snippets
@@ -56,8 +89,13 @@ class CodeSnippetsOverlay extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="" style={{ display: this.state.displayCreateSnippet }}>
-                    <CreateCodeSnippet currentPage={this.props.currentPage} complete={this.completeCreation} refreshPage={this.props.refreshPage} />                </div>
+                <div style={{ display: this.state.displayCreateSnippet }}>
+                    <CreateCodeSnippet currentPage={this.props.currentPage} complete={this.completeCreation}
+                        refreshPage={this.props.refreshPage} />
+                </div>
+                <div style={{ display: this.state.displaySnippet }}>
+                    <ViewCodeSnippet currentSnippet={this.state.currentSnippet} closeSnippet={this.closeSnippet}/>
+                </div>
                 <div className="ui cards" style={{ display: this.state.displaySnippets }}>
                     {this.populateGrid()}
                 </div>

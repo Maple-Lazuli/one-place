@@ -167,7 +167,7 @@ def add_snippet():
     template['raw'] = request.json['data']['code']
     prehash = template['title'] + str(template['creation_date'])
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
-    template['marked'] = markdown2.markdown(f"##{template['title']}\n```{template['language']}\n{template['raw']}\n```",
+    template['marked'] = markdown2.markdown(f"\n```{template['language']}\n{template['raw']}\n```",
                                             extras=['fenced-code-blocks'])
     template['creation_date'] = request.json['data']['creation_date']
     page['code_snippets'].update({template['id']: template})
@@ -210,6 +210,9 @@ def main():
 
 if __name__ == "__main__":
     content_dict = read_data()
-    ## content integrity
     ## make backup
+    ## content integrity
+    ## remove unlinked content
+    ## verify links
+
     main()
