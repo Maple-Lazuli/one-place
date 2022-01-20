@@ -1,5 +1,7 @@
 from flask import Flask, request, Response, send_file
 from flask_cors import CORS
+import markdown2
+import pygments
 import time
 import json
 import hashlib
@@ -12,17 +14,10 @@ app = Flask(__name__)
 CORS(app)
 content_dict = None
 
-
-@app.route("/markdown", methods=["GET"])
-def get_markdown():
-    return Response(json.dumps("return_json"), status=200, mimetype='application/json')
-
-
 @app.route("/projects", methods=["GET"])
 def get_projects():
     return_json = {"projects": [content_dict.get(key) for key in content_dict.keys()]}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
-
 
 
 @app.route("/projects", methods=["POST"])
@@ -49,13 +44,17 @@ def get_project():
     return_json = {"project": project}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
+
 @app.route("/project", methods=["POST"])
 def update_project():
+    #TODO FINISHIS
     global content_dict
     project_id = request.args.get('id')
     project = content_dict.get(project_id)
-    project['title'] = request.args.get('id')
+    project['title'] = request.args.get('title')
+    save_data(content_dict)
     return Response(json.dumps({'status': 'ok'}), status=200, mimetype='application/json')
+
 
 @app.route("/delete", methods=["GET"])
 def delete_project():
@@ -112,7 +111,7 @@ def create_page():
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     parent_project = content_dict.get(request.json['data']['pageParent'])
     parent_project['pages'].update({template['id']: template})
-    print(f'Recieved New Page {template["title"]} for  {parent_project["title"]}')
+    print(f'Received New Page {template["title"]} for  {parent_project["title"]}')
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 
@@ -124,6 +123,13 @@ def get_pages():
     parent = content_dict.get(parent_id)
     pages_dict = parent['pages']
     return_json = {"pages": [pages_dict.get(key) for key in pages_dict.keys()]}
+    return Response(json.dumps(return_json), status=200, mimetype='application/json')
+
+@app.route("/page", methods=["GET"])
+def get_page():
+    global content_dict
+    page = find_page(request.args.get("id"))
+    return_json = {"page": page}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
 
@@ -141,8 +147,27 @@ def save_image():
 @app.route("/images", methods=["GET"])
 def get_image():
     image_name = request.args.get('image')
-    image_name
     return send_file(cnst.images + image_name + '.png', mimetype='image/png')
+
+
+@app.route("/snippets", methods=['POST'])
+def add_snippet():
+    page_id = request.json['data']['pageID']
+    page = find_page(page_id)
+    template = cnst.code_snippets_dict.copy()
+    template['title'] = request.json['data']['title']
+    template['description'] = request.json['data']['description']
+    template['language'] = request.json['data']['language']
+    template['raw'] = request.json['data']['code']
+    prehash = template['title'] + str(template['creation_date'])
+    template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    template['marked'] = markdown2.markdown(f"##{template['title']}\n```{template['language']}\n{template['raw']}\n```",
+                                            extras=['fenced-code-blocks'])
+    template['creation_date'] = request.json['data']['creation_date']
+    page['code_snippets'].update({template['id']: template})
+    print(f"Received new code snippet for {page['title']}. Contents are:\n{template}")
+    save_data(content_dict)
+    return Response("Okay", status=200, mimetype='application/json')
 
 
 def save_data(data):
@@ -156,6 +181,21 @@ def read_data():
     with open(cnst.data_path + cnst.v1_name, 'rb') as f:
         loaded_data = pickle.load(f)
     return dict(loaded_data)
+
+
+def find_page(id, project_id=None):
+    global content_dict
+    if project_id is not None:
+        project = content_dict.get(project_id)
+        for pageID in project['pages'].keys():
+            if pageID == id:
+                return project['pages'].get(pageID)
+    else:
+        for project_ID in content_dict.keys():
+            project = content_dict.get(project_ID)
+            for pageID in project['pages'].keys():
+                if pageID == id:
+                    return project['pages'].get(pageID)
 
 
 def main():

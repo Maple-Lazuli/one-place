@@ -17,6 +17,7 @@ class App extends React.Component {
         currentPage: {
             'Title': 'No Page Selected',
             'id': 'None',
+            'code_snippets':[]
         },
         lastUpdate: 0
     }
@@ -39,6 +40,16 @@ class App extends React.Component {
         }
     }
 
+    refreshPage = async () => {
+        if (this.state.currentPage['id'] !== "None") {
+            const response = await Backend.get(
+                '/page', {
+                params: { "id": this.state.currentPage['id']}
+            });
+            this.setState({currentPage: response.data['page']})
+        }
+    }
+
     updatePage = (pageDict) => {
         this.setState({currentPage: pageDict, lastUpdate: pageDict['lastUpdate']})
     }
@@ -46,7 +57,9 @@ class App extends React.Component {
     render() {
         return (
             <div style={{}}>
+                {/* Hide the toolbar if a page is not selected */}
                 <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject}/>
+                <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage}/>
                 <div id="appArea" className="ui bottom attached segment pushable">
                     <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage}/>
                     <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate}/>

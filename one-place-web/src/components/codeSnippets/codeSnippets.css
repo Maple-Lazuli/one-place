@@ -1,16 +1,15 @@
-.shader{
-    background-color: rgba(112, 108, 53, 0.4);
+.overlayshader{
+    background-color: rgba(112, 108, 53, 0.1);
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     width: 100vw;
-    height: 90vh;
+    height: 80vh;
     z-index: 999;
 }
 
-.projectholder{
-    background-color: rgba(201, 192, 29, 0.63);
+.overlay{
     position: fixed;
     left: 50%;
     top: 50%;
@@ -21,14 +20,7 @@
     border-radius: 25px;
     padding:10px;
 }
-#create-projects-div{
-    height:10%;
-    width:100%;
-    align:center;
-}
-#access-projects-div{
-    height:90%;
-    padding: 10px;
-    overflow: auto;
-    
+
+.snippets{
+    background-color: rgba(255, 153, 0, 0.4);
 }

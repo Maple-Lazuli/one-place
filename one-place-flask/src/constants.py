@@ -24,8 +24,10 @@ code_snippets_dict = {
     "title": None,
     "description": None,
     "id": None,
-    "code": None,
-    "language": None
+    "raw": None,
+    "marked":None,
+    "language": None,
+    "creation_date": 0
 }
 
 files_dict = {
