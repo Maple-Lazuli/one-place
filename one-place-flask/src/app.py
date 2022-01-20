@@ -59,6 +59,7 @@ def update_project():
 @app.route("/delete", methods=["GET"])
 def delete_project():
     global content_dict
+    #back-up
     id_to_remove = request.args.get('id')
     if id_to_remove in content_dict.keys():
         content_dict.pop(id_to_remove)
@@ -67,7 +68,11 @@ def delete_project():
             project = content_dict.get(key)
             if id_to_remove in project['pages'].keys():
                 project['pages'].pop(id_to_remove)
-
+            for page_id in project['pages'].keys():
+                page = project['pages'].get(page_id)
+                if id_to_remove in page['code_snippets'].keys():
+                    page['code_snippets'].pop(id_to_remove)
+    #save
     return Response(id_to_remove, status=200, mimetype='application/json')
 
 
@@ -152,6 +157,7 @@ def get_image():
 
 @app.route("/snippets", methods=['POST'])
 def add_snippet():
+    global content_dict
     page_id = request.json['data']['pageID']
     page = find_page(page_id)
     template = cnst.code_snippets_dict.copy()
@@ -165,7 +171,7 @@ def add_snippet():
                                             extras=['fenced-code-blocks'])
     template['creation_date'] = request.json['data']['creation_date']
     page['code_snippets'].update({template['id']: template})
-    print(f"Received new code snippet for {page['title']}. Contents are:\n{template}")
+    print(f"Received new code snippet for {page['title']}")
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 
@@ -204,4 +210,6 @@ def main():
 
 if __name__ == "__main__":
     content_dict = read_data()
+    ## content integrity
+    ## make backup
     main()

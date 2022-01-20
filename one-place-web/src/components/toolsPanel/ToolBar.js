@@ -11,9 +11,9 @@ class ToolBar extends React.Component {
 
     toggleSnippetsOverlay = () => {
         if (this.state.snippetsOverlay === "None") {
-            this.setState({snippetsOverlay: "", overlayActive: ""})
+            this.setState({ snippetsOverlay: "", overlayActive: "" })
         } else {
-            this.setState({snippetsOverlay: "None", overlayActive: "None"})
+            this.setState({ snippetsOverlay: "None", overlayActive: "None" })
         }
     }
 
@@ -33,11 +33,14 @@ class ToolBar extends React.Component {
                     <a className="item">
                         File Storage
                     </a>
+                    <a className="item">
+                        REVIEW
+                    </a>
                 </div>
                 <div className="overlayshader" style={{ display: this.state.overlayActive }}>
                     {/* Background color */}
                     <div className='overlay snippets' style={{ display: this.state.snippetsOverlay }}>
-                        <CodeSnippetsOverlay currentPage={this.props.currentPage} refreshPage={this.props.refreshPage}/>
+                        <CodeSnippetsOverlay currentPage={this.props.currentPage} refreshPage={this.props.refreshPage} />
                     </div>
                     {/* file storage
                     <div className='snippetsOverlay' style={{ display: this.state.snippetsOverlay }}>

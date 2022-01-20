@@ -3,6 +3,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 import Backend from "../../api/backend"
 import CreateCodeSnippet from "./CreateCodeSnippet"
+import CodeSnippetCard from "./CodeSnippetCard"
 class CodeSnippetsOverlay extends React.Component {
 
     state = {
@@ -22,9 +23,13 @@ class CodeSnippetsOverlay extends React.Component {
 
     populateGrid = () => {
         let snippets = [];
-        // for (let i = 0; i < this.props.currentPage['code_snippets'].length; i++) {
-        //     snippets.push(<div key={i} />)
-        // }
+        let i = 0
+
+        for (const [key, value] of Object.entries(this.props.currentPage['code_snippets'])) {
+            snippets.push(<CodeSnippetCard key={i++}
+                refreshPage={this.props.refreshPage}
+                snippet={value} />)
+        }
         return snippets
     }
 
@@ -52,7 +57,7 @@ class CodeSnippetsOverlay extends React.Component {
                     </div>
                 </div>
                 <div className="" style={{ display: this.state.displayCreateSnippet }}>
-                    <CreateCodeSnippet currentPage={this.props.currentPage} complete={this.completeCreation} refreshPage={this.props.refreshPage}/>                </div>
+                    <CreateCodeSnippet currentPage={this.props.currentPage} complete={this.completeCreation} refreshPage={this.props.refreshPage} />                </div>
                 <div className="ui cards" style={{ display: this.state.displaySnippets }}>
                     {this.populateGrid()}
                 </div>
