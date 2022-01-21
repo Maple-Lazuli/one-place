@@ -18,21 +18,18 @@ class FileUpload extends React.Component {
         e.preventDefault();
         var formData = new FormData();
         formData.append('file', this.state.filefile);
-
+        formData.append('title', this.state.fileTitle);
+        formData.append('description', this.state.fileDesc);
+        formData.append('project_id', this.props.currentProject['id']);
+        formData.append('upload_date', Date.now());
         const response = await Backend.post(
             '/files', formData, {
-            data: {
-                "title": this.state.fileTitle,
-                "description": this.state.fileDesc,
-                "project_id": this.props.currentProject['id'],
-                "creation_date": Date.now(),
-            },
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        // this.props.refreshPage()
-        // this.props.complete()
+        this.props.refreshProject()
+        this.props.showUpload()
     }
 
     updateTitle = () => {

@@ -34,8 +34,11 @@ files_dict = {
     "title": None,
     "description": None,
     "upload_date": 0,
-    "id": None
+    "id": None,
+    "file_name": None,
+    "original_file_name":None
 }
 data_path = '../data/v1/'
 v1_name = "content.pkl"
 images = data_path+"images/"
+files = data_path+"files/"

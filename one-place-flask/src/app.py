@@ -67,11 +67,16 @@ def delete_project():
     else:
         for key in content_dict.keys():
             project = content_dict.get(key)
+            if id_to_remove in project['files'].keys():
+                print(f"deleted {id_to_remove}")
+                project['files'].pop(id_to_remove)
             if id_to_remove in project['pages'].keys():
+                print(f"deleted {id_to_remove}")
                 project['pages'].pop(id_to_remove)
             for page_id in project['pages'].keys():
                 page = project['pages'].get(page_id)
                 if id_to_remove in page['code_snippets'].keys():
+                    print(f"deleted {id_to_remove}")
                     page['code_snippets'].pop(id_to_remove)
     # save
     return Response(id_to_remove, status=200, mimetype='application/json')
@@ -139,15 +144,38 @@ def get_page():
     return_json = {"page": page}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
+
 @app.route("/files", methods=["POST"])
 def save_file():
+    global content_dict
     file = request.files['file']
     prehash = str(time.time()) + file.filename
-    file_name = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest() + file.filename[-4:]
-    file.save(os.path.join(cnst.images, file_name))
-    print(file_name)
-    print(len(file_name))
+    extension = file.filename[-4:]
+    id = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    file_name = id + extension
+    file.save(os.path.join(cnst.files, file_name))
+    project = content_dict.get(request.form['project_id'])
+    template = cnst.files_dict.copy()
+    template['title'] = request.form['title']
+    template['description'] = request.form['description']
+    template['upload_date'] = int(request.form['upload_date'])
+    template['id'] = id
+    template['file_name'] = file_name
+    template['original_file_name'] = file.filename
+    project['files'].update({template['id']: template})
+    save_data(content_dict)
+    print(f"received {template['original_file_name']} for {project['title']}")
     return Response(json.dumps({'file': file_name}), status=200, mimetype='application/json')
+
+
+@app.route("/files", methods=["GET"])
+def get_file():
+    print(request.args.get('project_id'))
+    print(request.args.get('file_id'))
+    project = content_dict.get(request.args.get('project_id'))
+    file = project['files'].get(request.args.get('file_id'))
+    return send_file(cnst.files + file['file_name'], download_name=file['original_file_name'])
+
 
 @app.route("/images", methods=["POST"])
 def save_image():

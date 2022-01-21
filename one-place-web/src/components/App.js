@@ -12,7 +12,8 @@ class App extends React.Component {
         currentProject: {
             'Title': 'No Project Selected',
             'id': 'None',
-            'pages': {}
+            'pages': {},
+            'files': {}
         },
         currentPage: {
             'Title': 'No Page Selected',
@@ -59,7 +60,7 @@ class App extends React.Component {
             <div style={{}}>
                 {/* Hide the toolbar if a page is not selected */}
                 <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject}/>
-                <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage}/>
+                <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage} refreshProject={this.refreshProject}/>
                 <div id="appArea" className="ui bottom attached segment pushable">
                     <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage}/>
                     <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate}/>

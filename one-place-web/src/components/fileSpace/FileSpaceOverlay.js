@@ -12,14 +12,16 @@ class FileSpaceOverlay extends React.Component {
     }
 
     populateGrid = () => {
-        let snippets = [];
+        let files = [];
         let i = 0
 
-        // for (const [key, value] of Object.entries(this.props.currentProject['files'])) {
-        //     snippets.push(<FileCard key={i++}
-        //         file={value} />)
-        // }
-        return snippets
+        for (const [key, value] of Object.entries(this.props.currentProject['files'])) {
+            files.push(<FileCard key={i++}
+                file={value} 
+                currentProject={this.props.currentProject}
+                refreshProject={this.props.refreshProject}/>)
+        }
+        return files
     }
 
     showUpload = () => {
@@ -63,7 +65,7 @@ class FileSpaceOverlay extends React.Component {
                     {this.populateGrid()}
                 </div>
                 <div style={{ display: this.state.displayUpload }}>
-                    <FileUpload currentProject={this.props.currentProject} refreshProject={this.props.refreshProject} />
+                    <FileUpload currentProject={this.props.currentProject} refreshProject={this.props.refreshProject} showUpload={this.showUpload} />
                 </div>
             </div>
         )
