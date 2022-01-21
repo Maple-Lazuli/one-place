@@ -260,6 +260,8 @@ def update_snippet():
 
 
 def save_data(data):
+    global last_save
+    last_save = time.time()
     with open(cnst.data_path + cnst.v1_name, 'wb') as f:
         pickle.dump(data, f)
     print("saved content")
