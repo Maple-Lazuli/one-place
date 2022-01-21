@@ -1,18 +1,30 @@
 from flask import Flask, request, Response, send_file
 from flask_cors import CORS
 import markdown2
-import pygments
 import time
 import json
 import hashlib
 import pickle
 import os
-
+import zipfile
+import socket
+import re
 import constants as cnst
 
 app = Flask(__name__)
 CORS(app)
 content_dict = None
+
+
+@app.route("/render", methods=["GET"])
+def update_render():
+    global content_dict
+    page_id = request.args.get('pageID')
+    page = find_page(page_id)
+    page['last_render'] = request.args.get('time')
+    save_data(content_dict)
+    print(f"Updated render time for {page['title']}")
+    return Response("ok", status=200, mimetype='application/json')
 
 
 @app.route("/projects", methods=["GET"])
@@ -48,7 +60,7 @@ def get_project():
 
 @app.route("/project", methods=["POST"])
 def update_project():
-    # TODO FINISHIS
+    # TODO FINISH UPDATE
     global content_dict
     project_id = request.args.get('id')
     project = content_dict.get(project_id)
@@ -260,15 +272,164 @@ def find_page(id, project_id=None):
                     return project['pages'].get(pageID)
 
 
+def backup():
+    source_dir = cnst.data_path
+    image_dir = cnst.images
+    files_dir = cnst.files
+    save_dir = cnst.backups
+    images = [f for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f))]
+    files = [f for f in os.listdir(files_dir) if os.path.isfile(os.path.join(files_dir, f))]
+    root = [f for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f))]
+    with zipfile.ZipFile(f"{save_dir}{time.time()}.zip", 'w') as zipf:
+        [zipf.write(image_dir + f, '/images/' + f) for f in images]
+        [zipf.write(files_dir + f, '/files/' + f) for f in files]
+        [zipf.write(source_dir + f, '/' + f) for f in root]
+
+
+def verify_keys(dictionary):
+    for project_id in dictionary.keys():
+        # verify project keys
+        project = dictionary.get(project_id)
+        project = verify_project(project)
+        for page_id in project['pages'].keys():
+            page = project['pages'].get(page_id)
+            page = verify_page(page)
+        for file_id in project['files'].keys():
+            file = project['files'].get(file_id)
+            file = verify_file_dict(file)
+    return dictionary
+
+
+def verify_project(project):
+    temp = cnst.project_dict.copy()
+    for project_key in temp.keys():
+        if not (project_key in project.keys()):
+            # set default values
+            project[project_key] = temp[project_key]
+    return project
+
+
+def verify_page(page):
+    temp = cnst.page_dict.copy()
+    for page_key in temp.keys():
+        if not (page_key in page.keys()):
+            # set default values
+            page[page_key] = temp[page_key]
+    for code_snippet_id in page['code_snippets'].keys():
+        snippet = page['code_snippets'].get(code_snippet_id)
+        snippet = verify_snippet(snippet)
+
+    for sub_page_id in page['pages'].keys():
+        sub_page = page['pages'].get(sub_page_id)
+        sub_page = verify_page(sub_page)
+
+    return page
+
+
+def verify_snippet(snippet):
+    temp = cnst.code_snippets_dict.copy()
+    for snippet_key in temp.keys():
+        if not (snippet_key in snippet.keys()):
+            # set default values
+            snippet[snippet_key] = temp[snippet_key]
+    return snippet
+
+
+def verify_file_dict(file_dict):
+    temp = cnst.files_dict.copy()
+    for file_key in temp.keys():
+        if not (file_key in file_dict.keys()):
+            # set default values
+            file_dict[file_key] = temp[file_key]
+    return file_dict
+
+
+def remove_unlinked_files(content):
+    linked_file_names = set()
+    for project_id in content.keys():
+        project = content.get(project_id)
+        for file_id in project['files'].keys():
+            file = project['files'].get(file_id)
+            linked_file_names.add(file['file_name'])
+
+    files = [f for f in os.listdir(cnst.files) if os.path.isfile(os.path.join(cnst.files, f))]
+    for file in files:
+        if not (file in linked_file_names):
+            print(f"removing {file}")
+            os.remove(cnst.files + file)
+
+
+def remove_unlinked_images(content):
+    content_string = ""
+    for project_id in content.keys():
+        project = content.get(project_id)
+        for page_id in project['pages'].keys():
+            page = project['pages'].get(page_id)
+            content_string += page['content'] if page['content'] is not None else ""
+
+    images = [f for f in os.listdir(cnst.images) if os.path.isfile(os.path.join(cnst.images, f))]
+    for image in images:
+        if content_string.find(image[:-4]) == -1:
+            print(f"removing image {image}")
+            os.remove(cnst.images + image)
+
+
+def update_image_links(content):
+    for project_id in content.keys():
+        project = content.get(project_id)
+        for page_id in project['pages']:
+            page = project['pages'].get(page_id)
+            if page['content'] is None:
+                continue
+            if page['content'].find(get_ip()) == -1:
+                page['content'] = fix_links(page['content'])
+
+
+def fix_links(content):
+    current_ip = get_ip()
+    pattern = r"!\[image\]\(http://[\S]*:3001"
+    replacement = f"![image](http://{current_ip}:3001"
+    return re.sub(pattern, replacement, content)
+
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
+
+def create_review_list(content):
+    with open(cnst.review_list, "w") as f:
+        for project_id in content.keys():
+            project = content.get(project_id)
+            f.write(f"{project['title']}\n")
+            for page_id in project['pages'].keys():
+                page = project['pages'].get(page_id)
+                if (page['content'] is None) or (float(page['last_render']) < 10):
+                    continue
+                else:
+                    f.write(f"{page['title']}: {(time.time() - float(page['last_render'])/1000) / 86400:.2f} days \n")
+            f.write(f"\n")
+
+
 def main():
     app.run(host='0.0.0.0', port=3001)
 
 
 if __name__ == "__main__":
+    backup()
     content_dict = read_data()
-    ## make backup
-    ## content integrity
-    ## remove unlinked content
-    ## verify links
-
+    content_dict = verify_keys(content_dict)
+    remove_unlinked_files(content_dict)
+    remove_unlinked_images(content_dict)
+    update_image_links(content_dict)
+    create_review_list(content_dict)
     main()

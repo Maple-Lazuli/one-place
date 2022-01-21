@@ -83,9 +83,23 @@ class PageContent extends React.Component {
             this.setState({ textAreaDisplay: "", markdownDisplay: "None" })
         } else {
             this.setState({ textAreaDisplay: "None", markdownDisplay: "" }, () => {
+                this.updateRenderTime()
             })
         }
+    }
 
+    updateRenderTime = async() => {
+        if (this.props.currentPage['id'] !== "None") {
+            const response = await Backend.get(
+                '/render', {
+                params: {
+                    pageID: this.props.currentPage['id'],
+                    time: Date.now()
+                }
+            });
+            if (response.status !== 200) {
+            }
+        }
     }
 
     uploadImage = async (e) => {
