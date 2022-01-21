@@ -5,8 +5,8 @@ import './snippetstyles.css'
 
 class ViewCodeSnippet extends React.Component {
 
-    selectSnippet = () => {
-        this.props.updatePage(this.props.pageDict)
+    modifiySnippet = () => {
+        this.props.modifyCurrentSnippet(this.props.currentSnippet)
     }
 
     render() {
@@ -17,7 +17,7 @@ class ViewCodeSnippet extends React.Component {
                         <button className="ui button small" onClick={this.props.closeSnippet}>Close</button>
                     </div>
                     <div className="two wide column">
-                        <button className="ui yellow button small" onClick={this.showCreateSnippet}>Modify</button>
+                        <button className="ui yellow button small" onClick={this.modifiySnippet}>Modify</button>
                     </div>
                     
                 </div>

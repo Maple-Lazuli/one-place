@@ -14,6 +14,7 @@ app = Flask(__name__)
 CORS(app)
 content_dict = None
 
+
 @app.route("/projects", methods=["GET"])
 def get_projects():
     return_json = {"projects": [content_dict.get(key) for key in content_dict.keys()]}
@@ -47,7 +48,7 @@ def get_project():
 
 @app.route("/project", methods=["POST"])
 def update_project():
-    #TODO FINISHIS
+    # TODO FINISHIS
     global content_dict
     project_id = request.args.get('id')
     project = content_dict.get(project_id)
@@ -59,7 +60,7 @@ def update_project():
 @app.route("/delete", methods=["GET"])
 def delete_project():
     global content_dict
-    #back-up
+    # back-up
     id_to_remove = request.args.get('id')
     if id_to_remove in content_dict.keys():
         content_dict.pop(id_to_remove)
@@ -72,7 +73,7 @@ def delete_project():
                 page = project['pages'].get(page_id)
                 if id_to_remove in page['code_snippets'].keys():
                     page['code_snippets'].pop(id_to_remove)
-    #save
+    # save
     return Response(id_to_remove, status=200, mimetype='application/json')
 
 
@@ -130,6 +131,7 @@ def get_pages():
     return_json = {"pages": [pages_dict.get(key) for key in pages_dict.keys()]}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
+
 @app.route("/page", methods=["GET"])
 def get_page():
     global content_dict
@@ -172,6 +174,23 @@ def add_snippet():
     template['creation_date'] = request.json['data']['creation_date']
     page['code_snippets'].update({template['id']: template})
     print(f"Received new code snippet for {page['title']}")
+    save_data(content_dict)
+    return Response("Okay", status=200, mimetype='application/json')
+
+
+@app.route("/snippets", methods=['PUT'])
+def update_snippet():
+    global content_dict
+    page_id = request.json['data']['pageID']
+    page = find_page(page_id)
+    snippet = page['code_snippets'].get(request.json['data']['snippetID'])
+    snippet['title'] = request.json['data']['title']
+    snippet['description'] = request.json['data']['description']
+    snippet['language'] = request.json['data']['language']
+    snippet['raw'] = request.json['data']['code']
+    snippet['marked'] = markdown2.markdown(f"\n```{snippet['language']}\n{snippet['raw']}\n```",
+                                           extras=['fenced-code-blocks'])
+    print(f"Received update for code snippet {snippet['title']} from {page['title']}")
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 

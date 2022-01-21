@@ -18,6 +18,10 @@ class CodeSnippetCard extends React.Component {
         this.props.refreshPage()
     }
 
+    modifiySnippet = () => {
+        this.props.modifyCurrentSnippet(this.props.snippet)
+    }
+
     render() {
         return (
             <div className="card">

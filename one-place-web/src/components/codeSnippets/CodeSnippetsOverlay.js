@@ -5,6 +5,7 @@ import Backend from "../../api/backend"
 import CreateCodeSnippet from "./CreateCodeSnippet"
 import CodeSnippetCard from "./CodeSnippetCard"
 import ViewCodeSnippet from './ViewCodeSnippet';
+import EditCodeSnippet from './EditCodeSnippet';
 class CodeSnippetsOverlay extends React.Component {
 
     state = {
@@ -13,7 +14,12 @@ class CodeSnippetsOverlay extends React.Component {
         displayModifySnippet: "None",
         displaySnippet: "None",
         currentSnippet: {
-            marked: ""
+            marked: "",
+            id:"",
+            raw:"",
+            title:"",
+            description:"",
+            language:""
         }
     }
 
@@ -21,7 +27,9 @@ class CodeSnippetsOverlay extends React.Component {
         this.setState({
             displayCreateSnippet: "None",
             displaySnippets: "",
-            displaySnippet: "None"
+            displaySnippet: "None",
+            displayModifySnippet: "None",
+            
         })
     }
     showCreateSnippet = () => {
@@ -31,7 +39,8 @@ class CodeSnippetsOverlay extends React.Component {
             this.setState({
                 displayCreateSnippet: "",
                 displaySnippets: "None",
-                displaySnippet: "None"
+                displaySnippet: "None",
+                displayModifySnippet: "None",
             })
         }
     }
@@ -41,17 +50,31 @@ class CodeSnippetsOverlay extends React.Component {
             currentSnippet: snippet,
             displayCreateSnippet: "None",
             displaySnippets: "None",
+            displayModifySnippet: "None",
             displaySnippet: ""
         })
     }
+
+    modifyCurrentSnippet = (snippet => {
+        this.setState({
+            currentSnippet: snippet,
+            displayCreateSnippet: "None",
+            displaySnippets: "None",
+            displayModifySnippet: "",
+            displaySnippet: "None"
+        })
+    })
 
     closeSnippet = () => {
         this.setState({
             displayCreateSnippet: "None",
             displaySnippets: "",
-            displaySnippet: "None"
+            displaySnippet: "None",
+            displayModifySnippet: "None"
         })
     }
+
+
 
     populateGrid = () => {
         let snippets = [];
@@ -61,6 +84,7 @@ class CodeSnippetsOverlay extends React.Component {
             snippets.push(<CodeSnippetCard key={i++}
                 refreshPage={this.props.refreshPage}
                 setCurrentSnippet={this.setCurrentSnippet}
+                modifyCurrentSnippet={this.modifyCurrentSnippet}
                 snippet={value} />)
         }
         return snippets
@@ -90,11 +114,19 @@ class CodeSnippetsOverlay extends React.Component {
                     </div>
                 </div>
                 <div style={{ display: this.state.displayCreateSnippet }}>
-                    <CreateCodeSnippet currentPage={this.props.currentPage} complete={this.completeCreation}
+                    <CreateCodeSnippet currentPage={this.props.currentPage} complete={this.completeCreation} 
                         refreshPage={this.props.refreshPage} />
                 </div>
                 <div style={{ display: this.state.displaySnippet }}>
-                    <ViewCodeSnippet currentSnippet={this.state.currentSnippet} closeSnippet={this.closeSnippet}/>
+                    <ViewCodeSnippet currentSnippet={this.state.currentSnippet}
+                    modifyCurrentSnippet={this.modifyCurrentSnippet} 
+                    closeSnippet={this.closeSnippet}/>
+                </div>
+                <div style={{ display: this.state.displayModifySnippet }}>
+                    <EditCodeSnippet currentSnippet={this.state.currentSnippet}
+                    currentPage={this.props.currentPage}
+                    refreshPage={this.props.refreshPage}
+                    closeSnippet={this.closeSnippet}/>
                 </div>
                 <div className="ui cards" style={{ display: this.state.displaySnippets }}>
                     {this.populateGrid()}

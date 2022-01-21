@@ -25,6 +25,9 @@ class ToolBar extends React.Component {
                         Code Snippets
                     </a>
                     <a className="item">
+                        Translations
+                    </a>
+                    <a className="item">
                         Whiteboard
                     </a>
                     <a className="item">
