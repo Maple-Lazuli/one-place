@@ -49,6 +49,14 @@ class ToolBar extends React.Component {
                     <a className="item">
                         REVIEW
                     </a>
+                    <div className="right menu">
+                        <div className='item'>
+                            <b>
+                            {this.props.currentProject['title']} - {this.props.currentPage['title']}
+                            </b>
+
+                        </div>
+                    </div>
                 </div>
                 <div className="overlayshader" style={{ display: this.state.overlayActive }}>
                     <div className='overlay snippets' style={{ display: this.state.snippetsOverlay }}>

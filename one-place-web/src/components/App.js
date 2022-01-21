@@ -18,17 +18,19 @@ class App extends React.Component {
         currentPage: {
             'Title': 'No Page Selected',
             'id': 'None',
-            'code_snippets':[]
+            'code_snippets': []
         },
-        lastUpdate: 0
+        lastUpdate: 0,
+        barState: "visible",
+        bar:"ui visible inverted left vertical sidebar menu"
     }
 
     updateProject = (projectDict) => {
-        this.setState({currentProject: projectDict})
+        this.setState({ currentProject: projectDict })
     }
 
     updatePageTime = (time) => {
-        this.setState({lastUpdate: time})
+        this.setState({ lastUpdate: time })
     }
 
     refreshProject = async () => {
@@ -37,7 +39,7 @@ class App extends React.Component {
                 '/project', {
                 params: { "id": this.state.currentProject['id'] }
             });
-            this.setState({currentProject: response.data['project']})
+            this.setState({ currentProject: response.data['project'] })
         }
     }
 
@@ -45,27 +47,38 @@ class App extends React.Component {
         if (this.state.currentPage['id'] !== "None") {
             const response = await Backend.get(
                 '/page', {
-                params: { "id": this.state.currentPage['id']}
+                params: { "id": this.state.currentPage['id'] }
             });
-            this.setState({currentPage: response.data['page']})
+            this.setState({ currentPage: response.data['page'] })
         }
     }
 
     updatePage = (pageDict) => {
-        this.setState({currentPage: pageDict, lastUpdate: pageDict['lastUpdate']})
+        this.setState({ currentPage: pageDict, lastUpdate: pageDict['lastUpdate'] })
+    }
+
+    toggleBar = () => {
+        if (this.state.barState === "visible"){
+            this.setState({barState: "", bar:"ui inverted left vertical sidebar menu"})
+        } else {
+            this.setState({barState: "visible", bar:"ui visible inverted left vertical sidebar menu"})
+        }
     }
 
     render() {
         return (
-            <div style={{}}>
-                {/* Hide the toolbar if a page is not selected */}
-                <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject}/>
-                <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage} refreshProject={this.refreshProject}/>
-                <div id="appArea" className="ui bottom attached segment pushable">
-                    <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage}/>
-                    <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate}/>
+            <div style={{ height: "100%", width: "100%" }}>
+                <div>
+                    <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject} toggleBar={this.toggleBar}/>
+                    <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage} refreshProject={this.refreshProject} />
                 </div>
-            </div>)
+                <div id="appArea" className="ui bottom attached segment pushable" style={{ height: "91vh", width: "100%" }}>
+                    <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage} bar={this.state.bar}/>
+                    <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate} />
+
+
+                </div>
+            </div >)
     }
 }
 

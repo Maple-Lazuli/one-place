@@ -134,9 +134,9 @@ class PageContent extends React.Component {
     render() {
 
         return (
-            <div className="pusher" onDoubleClick={this.toggleTextAreaMarkdown}>
-                <div className="ui fluid icon input" style={{ height: "100vh"}}>
-                    <textarea type="text" spellCheck="true" style={{ display: this.state.textAreaDisplay }} id="mainContentTextArea" onPaste={this.uploadImage} />
+            <div className="pusher" onDoubleClick={this.toggleTextAreaMarkdown} style={{ height: "100%", width:"100%"}}>
+                <div className="ui fluid icon input" style={{ height: "100%"}}>
+                    <textarea type="text" spellCheck="true" style={{ display: this.state.textAreaDisplay}} id="mainContentTextArea" onPaste={this.uploadImage} />
                     <div style={{ display: this.state.markdownDisplay, overflowY: "scroll" }} id="markdownArea">
                         <ReactMarkdown
                             children={this.state.divContent}

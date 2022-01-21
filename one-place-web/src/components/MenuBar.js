@@ -52,7 +52,10 @@ class MenuBar extends React.Component {
         return (
             <div>
                 <div className="ui secondary  menu" style={{ margin: "2px", zIndex: 10099 }}>
-                    <a className="item" onClick={this.toggleProjectsOverlay} >
+                <a className="item" onClick={this.props.toggleBar} >
+                        X
+                    </a>
+                <a className="item" onClick={this.toggleProjectsOverlay} >
                         Projects
                     </a>
                     <a className="item" onClick={this.togglePagesOverlay} >
@@ -77,6 +80,12 @@ class MenuBar extends React.Component {
                         <a className="ui item" onClick={this.sendBackupCommand}>
                             Backup
                         </a>
+                        <div className='item'>
+                            <b>
+                                v1.0
+                            </b>
+
+                        </div>
                     </div>
                 </div>
                 <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject} toggleProjectsOverlay={this.toggleProjectsOverlay} />

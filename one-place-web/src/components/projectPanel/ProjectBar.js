@@ -4,6 +4,10 @@ import '../projects/ProjectOverlay.css'
 import PageEntry from "./PageEntry";
 class ProjectBar extends React.Component {
 
+    state  = {
+        class: "ui inverted left vertical sidebar menu"
+    }
+    
     enumeratePages = () => {
         let pages = [];
         let i = 0
@@ -14,10 +18,19 @@ class ProjectBar extends React.Component {
         return pages
     }
 
+    displayType = () => {
+        console.log("toggle")
+        if (this.props.bar == "visible"){
+            this.setState({class: "ui visible inverted left vertical sidebar menu"})
+        } else {
+            this.setState({class: "ui inverted left vertical sidebar menu"})
+        }
+    }
+    
 
     render() {
         return (
-            <div className="ui visible inverted left vertical sidebar menu">
+            <div className={this.props.bar} id="projectbar">
                 <div>
                     <div className="ui medium yellow header" onDoubleClick={this.toggleAddProjectsDisplay}>
                         Open: {this.props.currentProject['title']}
