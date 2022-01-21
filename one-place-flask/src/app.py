@@ -139,6 +139,15 @@ def get_page():
     return_json = {"page": page}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
+@app.route("/files", methods=["POST"])
+def save_file():
+    file = request.files['file']
+    prehash = str(time.time()) + file.filename
+    file_name = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest() + file.filename[-4:]
+    file.save(os.path.join(cnst.images, file_name))
+    print(file_name)
+    print(len(file_name))
+    return Response(json.dumps({'file': file_name}), status=200, mimetype='application/json')
 
 @app.route("/images", methods=["POST"])
 def save_image():

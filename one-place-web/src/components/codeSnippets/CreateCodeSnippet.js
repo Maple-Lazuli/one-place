@@ -1,6 +1,5 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import './codeSnippets.css'
 import Backend from "../../api/backend"
 class CreateCodeSnippet extends React.Component {
     state = {

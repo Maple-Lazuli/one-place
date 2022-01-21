@@ -31,8 +31,9 @@ code_snippets_dict = {
 }
 
 files_dict = {
-    "name": None,
-    "upload_date": None,
+    "title": None,
+    "description": None,
+    "upload_date": 0,
     "id": None
 }
 data_path = '../data/v1/'

@@ -1,19 +1,29 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
+import './toolbar.css';
 import CodeSnippetsOverlay from '../codeSnippets/CodeSnippetsOverlay';
-import '../codeSnippets/codeSnippets.css';
+import FileSpaceOverlay from '../fileSpace/FileSpaceOverlay';
 class ToolBar extends React.Component {
 
     state = {
         overlayActive: "None",
-        snippetsOverlay: "None"
+        snippetsOverlay: "None",
+        filesOverlay: "None"
     }
 
     toggleSnippetsOverlay = () => {
         if (this.state.snippetsOverlay === "None") {
             this.setState({ snippetsOverlay: "", overlayActive: "" })
         } else {
-            this.setState({ snippetsOverlay: "None", overlayActive: "None" })
+            this.setState({ filesOverlay: "None", snippetsOverlay: "None", overlayActive: "None" })
+        }
+    }
+
+    toggleFilesOverlay = () => {
+        if (this.state.filesOverlay === "None") {
+            this.setState({ filesOverlay: "", overlayActive: "" })
+        } else {
+            this.setState({ filesOverlay: "None", snippetsOverlay: "None", overlayActive: "None" })
         }
     }
 
@@ -33,7 +43,7 @@ class ToolBar extends React.Component {
                     <a className="item">
                         Reference Links
                     </a>
-                    <a className="item">
+                    <a className="item" onClick={this.toggleFilesOverlay}>
                         File Storage
                     </a>
                     <a className="item">
@@ -41,17 +51,12 @@ class ToolBar extends React.Component {
                     </a>
                 </div>
                 <div className="overlayshader" style={{ display: this.state.overlayActive }}>
-                    {/* Background color */}
                     <div className='overlay snippets' style={{ display: this.state.snippetsOverlay }}>
                         <CodeSnippetsOverlay currentPage={this.props.currentPage} refreshPage={this.props.refreshPage} />
                     </div>
-                    {/* file storage
-                    <div className='snippetsOverlay' style={{ display: this.state.snippetsOverlay }}>
-                        <CodeSnippetsOverlay></CodeSnippetsOverlay>
-                    </div> */}
-
-
-
+                    <div className='overlay files' style={{ display: this.state.filesOverlay }}>
+                        <FileSpaceOverlay currentProject={this.props.currentProject} refreshProject={this.props.refreshProject} />
+                    </div>
                 </div>
 
             </div>
