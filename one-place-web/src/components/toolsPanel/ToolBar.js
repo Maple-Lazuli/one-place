@@ -58,7 +58,6 @@ class ToolBar extends React.Component {
                         <FileSpaceOverlay currentProject={this.props.currentProject} refreshProject={this.props.refreshProject} />
                     </div>
                 </div>
-
             </div>
         )
     }

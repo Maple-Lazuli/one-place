@@ -14,6 +14,21 @@ import constants as cnst
 app = Flask(__name__)
 CORS(app)
 content_dict = None
+last_save = time.time()
+
+
+@app.route("/save", methods=["GET"])
+def remote_save():
+    global content_dict
+    save_data(content_dict)
+    return Response("ok", status=200, mimetype='application/json')
+
+
+@app.route("/backup", methods=["GET"])
+def remote_backup():
+    backup()
+    print("received backup command")
+    return Response("ok", status=200, mimetype='application/json')
 
 
 @app.route("/render", methods=["GET"])
@@ -72,7 +87,7 @@ def update_project():
 @app.route("/delete", methods=["GET"])
 def delete_project():
     global content_dict
-    # back-up
+    backup()
     id_to_remove = request.args.get('id')
     if id_to_remove in content_dict.keys():
         content_dict.pop(id_to_remove)
@@ -90,7 +105,7 @@ def delete_project():
                 if id_to_remove in page['code_snippets'].keys():
                     print(f"deleted {id_to_remove}")
                     page['code_snippets'].pop(id_to_remove)
-    # save
+    save_data(content_dict)
     return Response(id_to_remove, status=200, mimetype='application/json')
 
 
@@ -120,7 +135,7 @@ def update_current():
         page['lastUpdate'] = update_time
         page['content'] = div_content
         print(f'Message update {div_content} at {update_time} for {page["title"]}')
-        save_data(content_dict)
+        save_data_from_update(content_dict)
     return Response("Ok", status=200, mimetype='application/json')
 
 
@@ -247,6 +262,14 @@ def update_snippet():
 def save_data(data):
     with open(cnst.data_path + cnst.v1_name, 'wb') as f:
         pickle.dump(data, f)
+    print("saved content")
+
+
+def save_data_from_update(data):
+    global last_save
+    if (time.time() - last_save) > (10 * 60):
+        last_save = time.time()
+        save_data(data)
 
 
 def read_data():
@@ -416,7 +439,7 @@ def create_review_list(content):
                 if (page['content'] is None) or (float(page['last_render']) < 10):
                     continue
                 else:
-                    f.write(f"{page['title']}: {(time.time() - float(page['last_render'])/1000) / 86400:.2f} days \n")
+                    f.write(f"{page['title']}: {(time.time() - float(page['last_render']) / 1000) / 86400:.2f} days \n")
             f.write(f"\n")
 
 

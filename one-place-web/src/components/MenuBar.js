@@ -2,6 +2,7 @@ import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import ProjectOverlay from './projects/ProjectOverlay';
 import PagesOverlay from './pages/PageOverlay';
+import Backend from '../api/backend';
 class MenuBar extends React.Component {
 
     state = {
@@ -30,6 +31,23 @@ class MenuBar extends React.Component {
 
     }
 
+    sendSaveCommand = async () => {
+        const response = await Backend.get(
+            '/save', {
+            params: {}
+        });
+        if (response.status !== 200) {
+        }
+    }
+    sendBackupCommand = async () => {
+        const response = await Backend.get(
+            '/backup', {
+            params: {}
+        });
+        if (response.status !== 200) {
+        }
+    }
+
     render() {
         return (
             <div>
@@ -53,13 +71,16 @@ class MenuBar extends React.Component {
                                 <i className="search link icon"></i>
                             </div>
                         </div>
-                        <a className="ui item">
-                            App Settings
+                        <a className="ui item" onClick={this.sendSaveCommand}>
+                            Save
+                        </a>
+                        <a className="ui item" onClick={this.sendBackupCommand}>
+                            Backup
                         </a>
                     </div>
                 </div>
                 <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject} toggleProjectsOverlay={this.toggleProjectsOverlay} />
-                <PagesOverlay overlay={this.state.pageoverlay} currentProject= {this.props.currentProject} updatePage={this.props.updatePage} refreshProject={this.props.refreshProject}/>
+                <PagesOverlay overlay={this.state.pageoverlay} currentProject={this.props.currentProject} updatePage={this.props.updatePage} refreshProject={this.props.refreshProject} />
             </div>
         )
     }
