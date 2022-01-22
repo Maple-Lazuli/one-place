@@ -54,7 +54,7 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 1000)
+        setTimeout(this.timers, 1500)
     }
 
     pullDivContent = async () => {
@@ -116,16 +116,17 @@ class PageContent extends React.Component {
                         'Content-Type': 'multipart/form-data'
                       }
             });
+            const ip = "10.0.0.89"
             const hash = response.data.image
             const element = document.getElementById("mainContentTextArea")
             const startPos = element.selectionStart
             const endPos =  element.selectionEnd
             if (startPos || endPos == '0') {
                 element.value = element.value.substring(0, startPos)
-                    + "![image](http://localhost:3001/images?image=" + hash + ")"
+                    + "![image](http://"+ ip +":3001/images?image=" + hash + ")"
                     + element.value.substring(endPos, element.value.length);
             } else {
-                element.value += "![image](http://localhost:3001/images?image=" + hash + ")"
+                element.value += "![image](http://"+ ip +":3001/images?image=" + hash + ")"
             }
         } 
     };

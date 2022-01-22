@@ -134,7 +134,7 @@ def update_current():
     if int(update_time) > int(page['lastUpdate']):
         page['lastUpdate'] = update_time
         page['content'] = div_content
-        print(f'Message update {div_content} at {update_time} for {page["title"]}')
+        print(f'Message update for {page["title"]}')
         save_data_from_update(content_dict)
     return Response("Ok", status=200, mimetype='application/json')
 

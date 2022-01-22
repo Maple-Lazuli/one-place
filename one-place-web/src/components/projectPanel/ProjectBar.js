@@ -33,7 +33,7 @@ class ProjectBar extends React.Component {
             <div className={this.props.bar} id="projectbar">
                 <div>
                     <div className="ui medium yellow header" onDoubleClick={this.toggleAddProjectsDisplay}>
-                        Open: {this.props.currentProject['title']}
+                        {this.props.currentProject['title']}
                     </div>
                     <div>
                         <div className="ui list left">
