@@ -26,6 +26,8 @@ def remote_save():
 
 @app.route("/backup", methods=["GET"])
 def remote_backup():
+    remove_unlinked_files(content_dict)
+    remove_unlinked_images(content_dict)
     backup()
     print("received backup command")
     return Response("ok", status=200, mimetype='application/json')
@@ -57,6 +59,8 @@ def create_project():
     template['category'] = request.json['data']['projectCategory'].strip()
     template['creation_date'] = request.json['data']['projectCreationTime']
     prehash = template['title'] + str(template['creation_date'])
+    template['pages'] = dict()
+    template['files'] = dict()
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     content_dict.update({template['id']: template})
     print(f'Received New Project {template["title"]}')
@@ -145,6 +149,8 @@ def create_page():
     template = cnst.page_dict.copy()
     template['title'] = request.json['data']['pageName'].strip()
     template['creation_date'] = request.json['data']['pageCreationTime']
+    template['pages'] = dict()
+    template['code_snippets'] = dict()
     prehash = template['title'] + str(template['creation_date'])
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     parent_project = content_dict.get(request.json['data']['pageParent'])
@@ -340,10 +346,13 @@ def verify_page(page):
         if not (page_key in page.keys()):
             # set default values
             page[page_key] = temp[page_key]
+    if len(page['code_snippets'].keys()) == 0:
+        page['code_snippets'] = dict()
     for code_snippet_id in page['code_snippets'].keys():
         snippet = page['code_snippets'].get(code_snippet_id)
         snippet = verify_snippet(snippet)
-
+    if len(page['pages'].keys()) == 0:
+        page['pages'] = dict()
     for sub_page_id in page['pages'].keys():
         sub_page = page['pages'].get(sub_page_id)
         sub_page = verify_page(sub_page)

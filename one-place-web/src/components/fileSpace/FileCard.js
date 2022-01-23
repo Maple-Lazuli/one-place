@@ -15,7 +15,7 @@ class FileCard extends React.Component {
     }
     
     fileLink = ()=> {
-        return "http://localhost:3001/files?project_id="+this.props.currentProject['id']+"&file_id="+this.props.file['id']
+        return "http://10.0.0.89:3001/files?project_id="+this.props.currentProject['id']+"&file_id="+this.props.file['id']
     }
 
     render() {
