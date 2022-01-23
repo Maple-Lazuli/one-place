@@ -5,8 +5,8 @@ project_dict = {
     "content": None,
     "creation_date": None,
     "id": None,
-    "pages": {},
-    "files": {},
+    "pages": dict(),
+    "files": dict(),
 }
 
 page_dict = {
@@ -17,8 +17,8 @@ page_dict = {
     "id": None,
     "content": None,
     "lastUpdate": 0,
-    "pages": {},
-    "code_snippets": {}
+    "pages": dict(),
+    "code_snippets": dict()
 }
 
 code_snippets_dict = {

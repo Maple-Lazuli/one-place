@@ -9,6 +9,7 @@ import os
 import zipfile
 import socket
 import re
+import copy
 import constants as cnst
 
 app = Flask(__name__)
@@ -53,14 +54,12 @@ def get_projects():
 @app.route("/projects", methods=["POST"])
 def create_project():
     global content_dict
-    template = cnst.project_dict.deepcopy()
+    template = copy.deepcopy(cnst.project_dict)
     template['title'] = request.json['data']['projectName'].strip()
     template['purpose'] = request.json['data']['projectPurpose'].strip()
     template['category'] = request.json['data']['projectCategory'].strip()
     template['creation_date'] = request.json['data']['projectCreationTime']
     prehash = template['title'] + str(template['creation_date'])
-    template['pages'] = dict()
-    template['files'] = dict()
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     content_dict.update({template['id']: template})
     print(f'Received New Project {template["title"]}')
@@ -146,11 +145,9 @@ def update_current():
 @app.route("/pages", methods=["POST"])
 def create_page():
     global content_dict
-    template = cnst.page_dict.deepcopy()
+    template = copy.deepcopy(cnst.page_dict)
     template['title'] = request.json['data']['pageName'].strip()
     template['creation_date'] = request.json['data']['pageCreationTime']
-    template['pages'] = dict()
-    template['code_snippets'] = dict()
     prehash = template['title'] + str(template['creation_date'])
     template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     parent_project = content_dict.get(request.json['data']['pageParent'])
@@ -188,7 +185,7 @@ def save_file():
     file_name = id + extension
     file.save(os.path.join(cnst.files, file_name))
     project = content_dict.get(request.form['project_id'])
-    template = cnst.files_dict.deepcopy()
+    template = copy.deepcopy(cnst.files_dict)
     template['title'] = request.form['title']
     template['description'] = request.form['description']
     template['upload_date'] = int(request.form['upload_date'])
@@ -232,7 +229,7 @@ def add_snippet():
     global content_dict
     page_id = request.json['data']['pageID']
     page = find_page(page_id)
-    template = cnst.code_snippets_dict.deepcopy()
+    template = copy.deepcopy(cnst.code_snippets_dict)
     template['title'] = request.json['data']['title']
     template['description'] = request.json['data']['description']
     template['language'] = request.json['data']['language']
@@ -332,7 +329,7 @@ def verify_keys(dictionary):
 
 
 def verify_project(project):
-    temp = cnst.project_dict.deepcopy()
+    temp = copy.deepcopy(cnst.project_dict)
     for project_key in temp.keys():
         if not (project_key in project.keys()):
             # set default values
@@ -341,7 +338,7 @@ def verify_project(project):
 
 
 def verify_page(page):
-    temp = cnst.page_dict.deepcopy()
+    temp = copy.deepcopy(cnst.page_dict)
     for page_key in temp.keys():
         if not (page_key in page.keys()):
             # set default values
@@ -361,7 +358,8 @@ def verify_page(page):
 
 
 def verify_snippet(snippet):
-    temp = cnst.code_snippets_dict.deepcopy()
+    temp = copy.deepcopy(cnst.code_snippets_dict)
+
     for snippet_key in temp.keys():
         if not (snippet_key in snippet.keys()):
             # set default values
@@ -370,7 +368,7 @@ def verify_snippet(snippet):
 
 
 def verify_file_dict(file_dict):
-    temp = cnst.files_dict.deepcopy()
+    temp = copy.deepcopy(cnst.files_dict)
     for file_key in temp.keys():
         if not (file_key in file_dict.keys()):
             # set default values
