@@ -53,7 +53,7 @@ def get_projects():
 @app.route("/projects", methods=["POST"])
 def create_project():
     global content_dict
-    template = cnst.project_dict.copy()
+    template = cnst.project_dict.deepcopy()
     template['title'] = request.json['data']['projectName'].strip()
     template['purpose'] = request.json['data']['projectPurpose'].strip()
     template['category'] = request.json['data']['projectCategory'].strip()
@@ -146,7 +146,7 @@ def update_current():
 @app.route("/pages", methods=["POST"])
 def create_page():
     global content_dict
-    template = cnst.page_dict.copy()
+    template = cnst.page_dict.deepcopy()
     template['title'] = request.json['data']['pageName'].strip()
     template['creation_date'] = request.json['data']['pageCreationTime']
     template['pages'] = dict()
@@ -188,7 +188,7 @@ def save_file():
     file_name = id + extension
     file.save(os.path.join(cnst.files, file_name))
     project = content_dict.get(request.form['project_id'])
-    template = cnst.files_dict.copy()
+    template = cnst.files_dict.deepcopy()
     template['title'] = request.form['title']
     template['description'] = request.form['description']
     template['upload_date'] = int(request.form['upload_date'])
@@ -232,7 +232,7 @@ def add_snippet():
     global content_dict
     page_id = request.json['data']['pageID']
     page = find_page(page_id)
-    template = cnst.code_snippets_dict.copy()
+    template = cnst.code_snippets_dict.deepcopy()
     template['title'] = request.json['data']['title']
     template['description'] = request.json['data']['description']
     template['language'] = request.json['data']['language']
@@ -332,7 +332,7 @@ def verify_keys(dictionary):
 
 
 def verify_project(project):
-    temp = cnst.project_dict.copy()
+    temp = cnst.project_dict.deepcopy()
     for project_key in temp.keys():
         if not (project_key in project.keys()):
             # set default values
@@ -341,18 +341,18 @@ def verify_project(project):
 
 
 def verify_page(page):
-    temp = cnst.page_dict.copy()
+    temp = cnst.page_dict.deepcopy()
     for page_key in temp.keys():
         if not (page_key in page.keys()):
             # set default values
             page[page_key] = temp[page_key]
-    if len(page['code_snippets'].keys()) == 0:
-        page['code_snippets'] = dict()
+    # if len(page['code_snippets'].keys()) == 0:
+    #     page['code_snippets'] = dict()
     for code_snippet_id in page['code_snippets'].keys():
         snippet = page['code_snippets'].get(code_snippet_id)
         snippet = verify_snippet(snippet)
-    if len(page['pages'].keys()) == 0:
-        page['pages'] = dict()
+    # if len(page['pages'].keys()) == 0:
+    #     page['pages'] = dict()
     for sub_page_id in page['pages'].keys():
         sub_page = page['pages'].get(sub_page_id)
         sub_page = verify_page(sub_page)
@@ -361,7 +361,7 @@ def verify_page(page):
 
 
 def verify_snippet(snippet):
-    temp = cnst.code_snippets_dict.copy()
+    temp = cnst.code_snippets_dict.deepcopy()
     for snippet_key in temp.keys():
         if not (snippet_key in snippet.keys()):
             # set default values
@@ -370,7 +370,7 @@ def verify_snippet(snippet):
 
 
 def verify_file_dict(file_dict):
-    temp = cnst.files_dict.copy()
+    temp = cnst.files_dict.deepcopy()
     for file_key in temp.keys():
         if not (file_key in file_dict.keys()):
             # set default values
