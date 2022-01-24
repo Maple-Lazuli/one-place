@@ -334,6 +334,10 @@ def verify_project(project):
         if not (project_key in project.keys()):
             # set default values
             project[project_key] = temp[project_key]
+        # if len(project['pages'].keys()) == 0:
+        #     project['pages'] = dict()
+        # if len(project['files'].keys()) == 0:
+        #     project['files'] = dict()
     return project
 
 
@@ -445,8 +449,10 @@ def create_review_list(content):
             f.write(f"{project['title']}\n")
             for page_id in project['pages'].keys():
                 page = project['pages'].get(page_id)
-                if (page['content'] is None) or (float(page['last_render']) < 10):
+                if page['content'] is None:
                     continue
+                elif float(page['last_render']) < 10:
+                    f.write(f"{page['title']}: Never Rendered.\n")
                 else:
                     f.write(f"{page['title']}: {(time.time() - float(page['last_render']) / 1000) / 86400:.2f} days \n")
             f.write(f"\n")
