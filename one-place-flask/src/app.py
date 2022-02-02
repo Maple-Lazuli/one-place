@@ -180,7 +180,7 @@ def save_file():
     global content_dict
     file = request.files['file']
     prehash = str(time.time()) + file.filename
-    extension = file.filename[-4:]
+    extension = file.filename.split(".")[-1]
     id = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
     file_name = id + extension
     file.save(os.path.join(cnst.files, file_name))
