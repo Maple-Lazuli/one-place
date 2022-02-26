@@ -15,7 +15,7 @@ class FileCard extends React.Component {
     }
     
     fileLink = ()=> {
-        return "http://10.0.0.89:3001/files?project_id="+this.props.currentProject['id']+"&file_id="+this.props.file['id']
+        return "http://maple:3001/files?project_id="+this.props.currentProject['id']+"&file_id="+this.props.file['id']
     }
 
     render() {
@@ -35,7 +35,7 @@ class FileCard extends React.Component {
 
                     <div className="extra content">
                         <div className="ui two buttons">
-                            <a className="ui basic green button" href={this.fileLink()}>Download</a>
+                            <a className="ui basic green button" href={this.fileLink()} target="_blank">Download</a>
                             <div className="ui basic red button" onClick={this.deleteFile}>Delete</div>
                         </div>
                     </div>

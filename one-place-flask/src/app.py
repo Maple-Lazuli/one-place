@@ -424,7 +424,7 @@ def update_image_links(content):
 def fix_links(content):
     current_ip = get_ip()
     pattern = r"!\[image\]\(http://[\S]*:3001"
-    replacement = f"![image](http://{current_ip}:3001"
+    replacement = f"![image](http://{'maple'}:3001"
     return re.sub(pattern, replacement, content)
 
 
