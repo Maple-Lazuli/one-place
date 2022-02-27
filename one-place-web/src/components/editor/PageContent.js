@@ -116,7 +116,7 @@ class PageContent extends React.Component {
                         'Content-Type': 'multipart/form-data'
                       }
             });
-            const ip = "10.0.0.89"
+            const ip = "maple"
             const hash = response.data.image
             const element = document.getElementById("mainContentTextArea")
             const startPos = element.selectionStart
