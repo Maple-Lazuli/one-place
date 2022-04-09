@@ -417,29 +417,14 @@ def update_image_links(content):
             page = project['pages'].get(page_id)
             if page['content'] is None:
                 continue
-            if page['content'].find(get_ip()) == -1:
+            else:
                 page['content'] = fix_links(page['content'])
 
 
 def fix_links(content):
-    current_ip = get_ip()
     pattern = r"!\[image\]\(http://[\S]*:3001"
-    replacement = f"![image](http://{'maple'}:3001"
+    replacement = f"![image](http://{socket.gethostname()}:3001"
     return re.sub(pattern, replacement, content)
-
-
-def get_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.settimeout(0)
-    try:
-        # doesn't even have to be reachable
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
 
 
 def create_review_list(content):
@@ -458,12 +443,36 @@ def create_review_list(content):
             f.write(f"\n")
 
 
+def ensure_dir(directory):
+    if os.path.isdir(directory):
+        return
+    else:
+        os.mkdir(directory)
+        return
+
+
+def ensure_directories(dir_list):
+    for directory in dir_list:
+        ensure_dir(directory)
+    return
+
+
 def main():
     app.run(host='0.0.0.0', port=3001)
 
 
 if __name__ == "__main__":
+    dir_list = [
+        "../data",
+        "../data/backups",
+        "../data/review_content",
+        "../data/v1",
+        "../data/v1/files",
+        "../data/v1/images"
+    ]
+    ensure_directories(dir_list)
     backup()
+
     content_dict = read_data()
     content_dict = verify_keys(content_dict)
     remove_unlinked_files(content_dict)
