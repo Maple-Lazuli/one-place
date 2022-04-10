@@ -1,0 +1,30 @@
+.overlayshader{
+    background-color: rgba(112, 108, 53, 0.1);
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 80vh;
+    z-index: 999;
+}
+
+.overlay{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vh;
+    box-shadow: 5px 10px 150px;
+    border-radius: 25px;
+    padding:10px;
+}
+
+.snippets{
+    background-color: rgba(238, 255, 0, 0.4);
+}
+
+.files{
+    background-color: rgba(189, 119, 28, 0.534);
+}

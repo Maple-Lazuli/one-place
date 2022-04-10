@@ -1,2 +1,10 @@
 node_modules/*
 one-place-flask/data/*
+one-place-flask/venv/*
+one-place-calendar/node_modules/*
+one-place-web/node_modules/*
+one-place-management/node_modules/*
+one-place-review/node_modules/*
+one-place-doit/node_modules/*
+
+
