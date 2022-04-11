@@ -8,6 +8,8 @@ import QuestionCard from './QuestionCard'
 import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for you
 
 
+
+
 class ReviewPage extends React.Component {
 
     populateGrid = () => {
@@ -15,6 +17,8 @@ class ReviewPage extends React.Component {
         for (let i = 0; i < this.props.questionList.length; i++) {
             questions.push(<QuestionCard key={i}
                 question={this.props.questionList[i]}
+                increaseCorrect={this.props.increaseCorrect}
+                currentPage={this.props.currentPage}
                 index={i} />)
         }
         return questions

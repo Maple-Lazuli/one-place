@@ -9,7 +9,7 @@ class AnswerBank extends React.Component {
         let elements = []
 
         for (let i = 0; i < this.props.answerbank['word_bank'].length; i++) {
-            elements.push(<Answer word={this.props.answerbank['word_bank'][i]} key={i} index={i} correctindex={this.props.answerbank['answer_idx']} />)
+            elements.push(<Answer word={this.props.answerbank['word_bank'][i]} key={i} index={i} correctindex={this.props.answerbank['answer_idx']} increaseCorrect={this.props.increaseCorrect} currentPage={this.props.currentPage} />)
         }
 
         return elements
@@ -18,11 +18,8 @@ class AnswerBank extends React.Component {
     render() {
         return (
             <div className="field">
-                <div className="ui twelve column grid">
+                <div className="ui six column grid">
                     <div className="row">
-                        <div className="column">
-                            <label style={{color:"white"}}>{this.props.index+1}</label>
-                        </div>
                         {this.PopulateAnswer()}
                     </div>
                 </div>

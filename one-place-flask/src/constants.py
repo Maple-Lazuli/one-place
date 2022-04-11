@@ -20,6 +20,7 @@ page_dict = {
     "pages": dict(),
     "code_snippets": dict(),
     "last_review": 0,
+    "score": 0
 }
 
 code_snippets_dict = {

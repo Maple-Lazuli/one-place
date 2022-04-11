@@ -237,7 +237,6 @@ def get_file():
 Images Endpoint
 '''
 
-
 @app.route("/images", methods=["POST"])
 def save_image():
     file = request.files['image']
@@ -258,7 +257,6 @@ def get_image():
 '''
 Snippets Endpoint
 '''
-
 
 @app.route("/snippets", methods=['POST'])
 def add_snippet():
@@ -297,11 +295,9 @@ def update_snippet():
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 
-
 """
 REVIEW Endpoint
 """
-
 
 @app.route("/review", methods=['GET'])
 def generate_questions():
@@ -316,6 +312,26 @@ def generate_questions():
                 candidate_pages.append(page['content'])
     questions = nlp.make_questions_from_page(review_page, candidate_pages)
     return Response(json.dumps({'questions': questions}), status=200, mimetype='application/json')
+
+
+@app.route("/review", methods=["POST"])
+def update_review():
+    global content_dict
+    review_page = find_page(request.json['data']['pageID'])
+    review_page['last_review'] = int(request.json['data']['time'])
+    save_data(content_dict)
+    print(f"Updated reivew time For {review_page['title']}")
+    return Response("Okay", status=200, mimetype='application/json')
+
+
+@app.route("/score", methods=["POST"])
+def update_score():
+    global content_dict
+    review_page = find_page(request.json['data']['pageID'])
+    review_page['score'] += int(request.json['data']['score'])
+    save_data(content_dict)
+    print(f"Updated Score For {review_page['title']} to be {review_page['score']}")
+    return Response("Okay", status=200, mimetype='application/json')
 
 
 def save_data(data):
@@ -528,7 +544,6 @@ if __name__ == "__main__":
     ]
     ensure_directories(dir_list)
     backup()
-
     content_dict = read_data()
     content_dict = verify_keys(content_dict)
     remove_unlinked_files(content_dict)

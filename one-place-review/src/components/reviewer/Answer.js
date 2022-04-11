@@ -1,10 +1,11 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css'
-
+import Backend from '../../api/backend';
 class Answer extends React.Component {
 
     state = {
-        correct: "ui button brown"
+        correct: "ui button brown",
+        clicked: false
     }
 
 
@@ -14,12 +15,36 @@ class Answer extends React.Component {
 
     RevealAnswer = (e) => {
         e.preventDefault();
-    // TODO Send updates to the server about performance on this page
-        if (this.props.index == this.props.correctindex) {
-            this.setState({ correct: "ui button green" })
-        } else
-            this.setState({ correct: "ui button red" })
+
+        if (!this.state.clicked) {
+            if (this.props.index == this.props.correctindex) {
+                this.setState({ correct: "ui button green", clicked: true })
+                this.props.increaseCorrect()
+                this.sendScoreIncrement(1)
+            } else {
+                this.setState({ correct: "ui button red", clicked: true })
+                this.sendScoreIncrement(-1)
+            }
+
+        }
     }
+
+    sendScoreIncrement = async (ammount) => {
+        if (this.props.currentPage['id'] !== "None") {
+            const response = await Backend.post(
+                '/score', {
+                data: {
+                    pageID: this.props.currentPage['id'],
+                    score: ammount
+                }
+            });
+            if (response.status !== 200) {
+            }
+        }
+    }
+
+
+
 
     render() {
         return (

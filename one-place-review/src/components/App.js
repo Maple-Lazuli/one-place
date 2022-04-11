@@ -19,8 +19,12 @@ class App extends React.Component {
         currentPage: {
             'Title': 'No Page Selected',
             'id': 'None',
-            'code_snippets': []
+            'code_snippets': [],
+            'last_review': 0,
+            'score': 0
         },
+        numCorrect: 0,
+        numquestions: 0,
         lastUpdate: 0,
         barState: "visible",
         bar: "ui visible inverted left vertical sidebar menu",
@@ -62,8 +66,12 @@ class App extends React.Component {
     }
 
     updateQuestions = (questions) => {
-        this.setState({ questionList: questions})
+        let count = 0
 
+        for (let i = 0; i < questions.length; i++) {
+            count += questions[i]['question_banks'].length
+        }
+        this.setState({ questionList: questions, numquestions: count })
     }
 
     toggleBar = () => {
@@ -71,6 +79,26 @@ class App extends React.Component {
             this.setState({ barState: "", bar: "ui inverted left vertical sidebar menu" })
         } else {
             this.setState({ barState: "visible", bar: "ui visible inverted left vertical sidebar menu" })
+        }
+    }
+
+
+    increaseCorrect = async () => {
+        let updatecount = this.state.numCorrect + 1
+
+        if ((this.state.currentPage['id'] !== "None") && (this.state.numquestions == updatecount)) {
+            console.log("finished review")
+            const response = await Backend.post(
+                '/review', {
+                data: {
+                    pageID: this.state.currentPage['id'],
+                    time: Date.now()
+                }
+            });
+            if (response.status !== 200) {
+            }
+        } else {
+            this.setState({ numCorrect: updatecount })
         }
     }
 
@@ -82,8 +110,8 @@ class App extends React.Component {
                     <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage} refreshProject={this.refreshProject} />
                 </div>
                 <div id="appArea" className="ui bottom attached segment pushable" style={{ height: "91vh", width: "100%" }}>
-                    <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage} bar={this.state.bar}  updateQuestions={this.updateQuestions}/>
-                    <ReviewPage questionList={this.state.questionList}/>
+                    <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage} bar={this.state.bar} updateQuestions={this.updateQuestions} />
+                    <ReviewPage questionList={this.state.questionList} increaseCorrect={this.increaseCorrect} currentPage={this.state.currentPage} />
                 </div>
             </div >)
     }

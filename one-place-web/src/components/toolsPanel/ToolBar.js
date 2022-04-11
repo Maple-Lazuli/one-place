@@ -38,7 +38,7 @@ class ToolBar extends React.Component {
                         File Storage
                     </a>
                     {/* Update this to be a link to a project review */}
-                    <a className="item">
+                    <a href={"http://"+window.location.hostname+":3002"}  className="item">
                         Review
                     </a>
                     <div className="right menu">

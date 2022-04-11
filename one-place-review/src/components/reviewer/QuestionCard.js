@@ -7,16 +7,16 @@ class QuestionCard extends React.Component {
 
         let elements = []
         for (let i = 0; i < this.props.question['question_banks'].length; i++) {
-            elements.push(<AnswerBank key={i} answerbank={this.props.question['question_banks'][i]} index={i}/>)
+            elements.push(<AnswerBank key={i} answerbank={this.props.question['question_banks'][i]} index={i} increaseCorrect={this.props.increaseCorrect} currentPage={this.props.currentPage} />)
         }
         return elements
     }
 
     render() {
         return (
-            <form className="ui form" style={{color:"white"}}>
+            <form className="ui form" style={{ color: "white" }}>
                 <div className="field">
-                    <label style={{color: "white"}}>Question: {this.props.index+1}</label>
+                    <label style={{ color: "white" }}>Question: {this.props.index + 1}</label>
                     {this.props.question['blank_sentence']}
                 </div>
                 {this.PopulateAnswerButtons()}

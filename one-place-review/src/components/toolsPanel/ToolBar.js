@@ -8,6 +8,14 @@ class ToolBar extends React.Component {
         snippetsOverlay: "None",
         filesOverlay: "None"
     }
+
+
+    getReviewTime = () => {
+        let date = new Date(this.props.currentPage['last_review'] * 1000)
+        return date.toDateString();
+
+    }
+
     render() {
         return (
             <div style={{ backgroundColor: 'gold' }}>
@@ -20,7 +28,7 @@ class ToolBar extends React.Component {
                     <div className="right menu">
                         <div className='item'>
                             <b>
-                                LAST REVIEWED - {this.props.currentPage['title']}
+                                Last Reviewed: {this.getReviewTime()} &emsp;-&emsp;  Current Score: {this.props.currentPage['score']}
                             </b>
                         </div>
                     </div>
