@@ -18,7 +18,8 @@ page_dict = {
     "content": None,
     "lastUpdate": 0,
     "pages": dict(),
-    "code_snippets": dict()
+    "code_snippets": dict(),
+    "last_review": 0,
 }
 
 code_snippets_dict = {

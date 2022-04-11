@@ -1,4 +1,5 @@
 import React from "react";
+import Backend from '../../api/backend';
 import 'semantic-ui-css/semantic.min.css';
 import './page.css';
 
@@ -15,6 +16,21 @@ class PageEntry extends React.Component {
 
     selectPage = () => {
         this.props.updatePage(this.props.pageDict)
+        this.pullQuestions()
+    // send page review update here
+
+    }
+
+    pullQuestions = async () => {
+            console.log("Sent Review Request")
+            const response = await Backend.get(
+                '/review', {
+                params: {
+                    id: this.props.pageDict['id']
+                }
+            });
+            this.props.updateQuestions(response.data['questions'])
+            console.log("Request Done")
     }
 
     render() {

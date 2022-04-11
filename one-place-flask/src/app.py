@@ -11,6 +11,7 @@ import socket
 import re
 import copy
 import constants as cnst
+import nlp_utils as nlp
 
 app = Flask(__name__)
 CORS(app)
@@ -44,9 +45,11 @@ def update_render():
     print(f"Updated render time for {page['title']}")
     return Response("ok", status=200, mimetype='application/json')
 
+
 '''
 PROJECT Endpoints
 '''
+
 
 @app.route("/projects", methods=["GET"])
 def get_projects():
@@ -89,9 +92,11 @@ def update_project():
     save_data(content_dict)
     return Response(json.dumps({'status': 'ok'}), status=200, mimetype='application/json')
 
+
 '''
 DELETE Endpoint
 '''
+
 
 @app.route("/delete", methods=["GET"])
 def delete_project():
@@ -117,9 +122,11 @@ def delete_project():
     save_data(content_dict)
     return Response(id_to_remove, status=200, mimetype='application/json')
 
+
 '''
 Updates Endpoint
 '''
+
 
 @app.route("/updates", methods=["GET"])
 def send_current():
@@ -150,9 +157,11 @@ def update_current():
         save_data_from_update(content_dict)
     return Response("Ok", status=200, mimetype='application/json')
 
+
 '''
 Pages Endpoint
 '''
+
 
 @app.route("/pages", methods=["POST"])
 def create_page():
@@ -186,9 +195,11 @@ def get_page():
     return_json = {"page": page}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
+
 '''
 Files Endpoint
 '''
+
 
 @app.route("/files", methods=["POST"])
 def save_file():
@@ -221,6 +232,7 @@ def get_file():
     file = project['files'].get(request.args.get('file_id'))
     return send_file(cnst.files + file['file_name'], download_name=file['original_file_name'])
 
+
 '''
 Images Endpoint
 '''
@@ -246,6 +258,7 @@ def get_image():
 '''
 Snippets Endpoint
 '''
+
 
 @app.route("/snippets", methods=['POST'])
 def add_snippet():
@@ -283,6 +296,26 @@ def update_snippet():
     print(f"Received update for code snippet {snippet['title']} from {page['title']}")
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
+
+
+"""
+REVIEW Endpoint
+"""
+
+
+@app.route("/review", methods=['GET'])
+def generate_questions():
+    global content_dict
+    review_page = find_page(request.args.get("id"))['content']
+    candidate_pages = []
+    projects = [content_dict.get(key) for key in content_dict.keys()]
+    for project in projects:
+        pages = [project['pages'].get(key) for key in project['pages'].keys()]
+        for page in pages:
+            if page['content'] is not None:
+                candidate_pages.append(page['content'])
+    questions = nlp.make_questions_from_page(review_page, candidate_pages)
+    return Response(json.dumps({'questions': questions}), status=200, mimetype='application/json')
 
 
 def save_data(data):

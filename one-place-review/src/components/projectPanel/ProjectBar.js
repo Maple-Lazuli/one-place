@@ -12,7 +12,7 @@ class ProjectBar extends React.Component {
         let pages = [];
         let i = 0
         for (const [key, value] of Object.entries(this.props.currentProject['pages'])) {
-            pages.push(<PageEntry key={i++} pageDict={value} updatePage={this.props.updatePage} currentPage={this.props.currentPage}/>)
+            pages.push(<PageEntry key={i++} pageDict={value} updatePage={this.props.updatePage} currentPage={this.props.currentPage} updateQuestions={this.props.updateQuestions}/>)
         }
 
         return pages

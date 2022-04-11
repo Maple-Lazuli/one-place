@@ -1,7 +1,8 @@
 import React from "react";
 import 'semantic-ui-css/semantic.min.css';
 import MenuBar from "./MenuBar";
-import PageContent from "./editor/PageContent";
+import ReviewPage from "./reviewer/ReviewPage";
+
 import ProjectBar from "./projectPanel/ProjectBar";
 import ToolBar from "./toolsPanel/ToolBar";
 import Backend from "../api/backend";
@@ -22,7 +23,8 @@ class App extends React.Component {
         },
         lastUpdate: 0,
         barState: "visible",
-        bar:"ui visible inverted left vertical sidebar menu"
+        bar: "ui visible inverted left vertical sidebar menu",
+        questionList: []
     }
 
     updateProject = (projectDict) => {
@@ -54,14 +56,21 @@ class App extends React.Component {
     }
 
     updatePage = (pageDict) => {
-        this.setState({ currentPage: pageDict, lastUpdate: pageDict['lastUpdate'] })
+        this.setState({ currentPage: pageDict, lastUpdate: pageDict['lastUpdate'] }, () => {
+        })
+
+    }
+
+    updateQuestions = (questions) => {
+        this.setState({ questionList: questions})
+
     }
 
     toggleBar = () => {
-        if (this.state.barState === "visible"){
-            this.setState({barState: "", bar:"ui inverted left vertical sidebar menu"})
+        if (this.state.barState === "visible") {
+            this.setState({ barState: "", bar: "ui inverted left vertical sidebar menu" })
         } else {
-            this.setState({barState: "visible", bar:"ui visible inverted left vertical sidebar menu"})
+            this.setState({ barState: "visible", bar: "ui visible inverted left vertical sidebar menu" })
         }
     }
 
@@ -69,14 +78,12 @@ class App extends React.Component {
         return (
             <div style={{ height: "100%", width: "100%" }}>
                 <div>
-                    <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject} toggleBar={this.toggleBar}/>
+                    <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject} toggleBar={this.toggleBar} />
                     <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage} refreshProject={this.refreshProject} />
                 </div>
                 <div id="appArea" className="ui bottom attached segment pushable" style={{ height: "91vh", width: "100%" }}>
-                    <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage} bar={this.state.bar}/>
-                    <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate} />
-
-
+                    <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage} bar={this.state.bar}  updateQuestions={this.updateQuestions}/>
+                    <ReviewPage questionList={this.state.questionList}/>
                 </div>
             </div >)
     }

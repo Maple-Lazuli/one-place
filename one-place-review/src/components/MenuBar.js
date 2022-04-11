@@ -1,7 +1,6 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import ProjectOverlay from './projects/ProjectOverlay';
-import PagesOverlay from './pages/PageOverlay';
 import Backend from '../api/backend';
 class MenuBar extends React.Component {
 
@@ -16,19 +15,6 @@ class MenuBar extends React.Component {
         } else {
             this.setState({ overlay: "None" })
         }
-    }
-
-    togglePagesOverlay = () => {
-        if (this.props.currentProject.id === "None") {
-            alert("Select a project First")
-        } else {
-            if (this.state.pageoverlay === "None") {
-                this.setState({ pageoverlay: "" })
-            } else {
-                this.setState({ pageoverlay: "None" })
-            }
-        }
-
     }
 
     sendSaveCommand = async () => {
@@ -58,17 +44,8 @@ class MenuBar extends React.Component {
                 <a className="item" onClick={this.toggleProjectsOverlay} >
                         Projects
                     </a>
-                    <a className="item" onClick={this.togglePagesOverlay} >
-                        Pages
-                    </a>
-                    {/* Update these to be links not apps */}
                     <a className="item">
-                        Calendar
-                    </a>
-                    <a className="item">
-                        To Do
-                    </a>
-                    <a className="item">
+                        {/* Insert Download? */}
                         Review Metrics
                     </a>
                     <div className="right menu">
@@ -86,14 +63,13 @@ class MenuBar extends React.Component {
                         </a>
                         <div className='item'>
                             <b>
-                                v1.0
+                                v1.5
                             </b>
 
                         </div>
                     </div>
                 </div>
                 <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject} toggleProjectsOverlay={this.toggleProjectsOverlay} />
-                <PagesOverlay overlay={this.state.pageoverlay} currentProject={this.props.currentProject} updatePage={this.props.updatePage} refreshProject={this.props.refreshProject} />
             </div>
         )
     }

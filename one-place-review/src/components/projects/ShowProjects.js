@@ -11,9 +11,8 @@ class ShowProjects extends React.Component {
                 projectDict={this.props.projectList[i]}
                 updateProject={this.props.updateProject}
                 refreshProjects={this.props.refreshProjects}
-                toggleProjectsOverlay={this.props.toggleProjectsOverlay} 
-                index={i}
-                setModify={this.props.setModify}/>)
+                toggleProjectsOverlay={this.props.toggleProjectsOverlay}
+                index={i} />)
         }
         return projects
     }
