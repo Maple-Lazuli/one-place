@@ -53,7 +53,7 @@ def make_questions_from_page(page, page_list):
     page_sentences = [sent for sent in page.sents]
 
     # the minimum number of questions
-    minumum_num_questions = max(math.ceil(len(page_sentences) / 10), 1)
+    minumum_num_questions = min(max(math.ceil(len(page_sentences) / 100), 1), 15)
 
     # Find the next five most similar pages
     page_list = [re.sub(link_pattern, replacement, p) for p in page_list]
@@ -85,12 +85,12 @@ def make_questions_from_page(page, page_list):
 
             # A list of words to strip and make questions from
             question_bank_list = []
-            last_idx = -3
+            last_idx = -7
             for idx, word in enumerate(sentence):
                 # prevent multiple blanks in a row
                 if word.is_stop or len(word.text) < 6:
                     continue
-                if test_word(word) and ((idx - last_idx) >= 3):
+                if test_word(word) and ((idx - last_idx) >= 7):
                     last_idx = idx
                     # make sure the test word is not in the word bag
                     excluded_word_bag = [w for w in word_bag if w.text.lower() != word.text.lower()]
