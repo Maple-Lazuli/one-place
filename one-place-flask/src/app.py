@@ -55,7 +55,11 @@ PROJECT Endpoints
 
 @app.route("/projects", methods=["GET"])
 def get_projects():
-    return_json = {"projects": [content_dict.get(key) for key in content_dict.keys()]}
+    projects = [content_dict.get(key) for key in content_dict.keys()]
+    # sort by last render
+    projects.sort(key=sort_project_key, reverse=True)
+
+    return_json = {"projects": projects}
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
 
@@ -257,6 +261,7 @@ def save_image():
 def get_image():
     image_name = request.args.get('image')
     return send_file(cnst.images + image_name + '.png', mimetype='image/png')
+
 
 @app.route("/reviewcsv", methods=["GET"])
 def get_csv():
@@ -575,6 +580,14 @@ def create_modification_csv():
     df.to_csv("../data/review_content/access.csv", index=False)
 
     return
+
+
+def sort_project_key(p):
+    pages = [p['pages'].get(key) for key in p['pages'].keys()]
+
+    last_render = np.max([int(page['last_render']) for page in pages])
+
+    return last_render
 
 
 def main():

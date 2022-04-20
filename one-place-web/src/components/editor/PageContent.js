@@ -22,7 +22,6 @@ class PageContent extends React.Component {
     }
     componentDidMount() {
         //get the latest updates when the page renders
-        console.log("mounted!!")
         this.timers()
     }
 
@@ -71,7 +70,6 @@ class PageContent extends React.Component {
                     pageID: this.props.currentPage['id']
                 }
             });
-            // This is where the last updater field would go
             if ((this.props.lastUpdate <= response.data.updateTime) && (response.data.editor != this.state.editorId)) {
                 this.props.updatePageTime(response.data.updateTime)
                 this.setState({ divContent: response.data.content }, () => {
