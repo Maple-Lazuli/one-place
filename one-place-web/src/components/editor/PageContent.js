@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import { hashRandom } from 'react-hash-string';
 import ReactMarkdown from 'react-markdown';
 import 'semantic-ui-css/semantic.min.css';
 import Backend from '../../api/backend';
@@ -15,11 +16,13 @@ class PageContent extends React.Component {
 
     state = {
         divContent: "",
-        textAreaDisplay: "",
-        markdownDisplay: "None"
+        textAreaDisplay: "none",
+        markdownDisplay: "",
+        editorId: hashRandom()
     }
     componentDidMount() {
         //get the latest updates when the page renders
+        console.log("mounted!!")
         this.timers()
     }
 
@@ -32,7 +35,8 @@ class PageContent extends React.Component {
                     divContent: this.state.divContent,
                     time: this.props.lastUpdate,
                     parentID: this.props.currentProject['id'],
-                    pageID: this.props.currentPage['id']
+                    pageID: this.props.currentPage['id'],
+                    editor: this.state.editorId
                 }
             });
         }
@@ -54,12 +58,12 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 1500)
+        setTimeout(this.timers, 750)
     }
 
     pullDivContent = async () => {
         //Query Server For updates
-        if (this.props.currentPage['id'] !== "None") {
+        if (this.props.currentPage['id'] !== "None"){
             const response = await Backend.get(
                 '/updates', {
                 params: {
@@ -67,7 +71,8 @@ class PageContent extends React.Component {
                     pageID: this.props.currentPage['id']
                 }
             });
-            if (this.props.lastUpdate <= response.data.updateTime) {
+            // This is where the last updater field would go
+            if ((this.props.lastUpdate <= response.data.updateTime) && (response.data.editor != this.state.editorId)) {
                 this.props.updatePageTime(response.data.updateTime)
                 this.setState({ divContent: response.data.content }, () => {
                     document.getElementById("mainContentTextArea").value = response.data.content

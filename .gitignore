@@ -8,3 +8,4 @@ one-place-review/node_modules/*
 one-place-doit/node_modules/*
 
 
+one-place-flask/src/__pycache__/*

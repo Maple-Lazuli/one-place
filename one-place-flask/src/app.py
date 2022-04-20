@@ -136,7 +136,8 @@ def send_current():
     page = project['pages'].get(page_id)
     return_json = {
         "content": page['content'],
-        'updateTime': page['lastUpdate']
+        'updateTime': page['lastUpdate'],
+        'editor': page['editor']
     }
     return Response(json.dumps(return_json), status=200, mimetype='application/json')
 
@@ -153,6 +154,7 @@ def update_current():
     if int(update_time) > int(page['lastUpdate']):
         page['lastUpdate'] = update_time
         page['content'] = div_content
+        page['editor'] = request.json['data']['editor']
         print(f'Message update for {page["title"]}')
         save_data_from_update(content_dict)
     return Response("Ok", status=200, mimetype='application/json')
