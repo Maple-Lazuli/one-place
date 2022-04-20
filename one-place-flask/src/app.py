@@ -12,6 +12,8 @@ import re
 import copy
 import constants as cnst
 import nlp_utils as nlp
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
@@ -239,6 +241,7 @@ def get_file():
 Images Endpoint
 '''
 
+
 @app.route("/images", methods=["POST"])
 def save_image():
     file = request.files['image']
@@ -255,10 +258,16 @@ def get_image():
     image_name = request.args.get('image')
     return send_file(cnst.images + image_name + '.png', mimetype='image/png')
 
+@app.route("/reviewcsv", methods=["GET"])
+def get_csv():
+    create_modification_csv()
+    return send_file("../data/review_content/access.csv", mimetype='text/csv')
+
 
 '''
 Snippets Endpoint
 '''
+
 
 @app.route("/snippets", methods=['POST'])
 def add_snippet():
@@ -297,9 +306,11 @@ def update_snippet():
     save_data(content_dict)
     return Response("Okay", status=200, mimetype='application/json')
 
+
 """
 REVIEW Endpoint
 """
+
 
 @app.route("/review", methods=['GET'])
 def generate_questions():
@@ -528,6 +539,41 @@ def ensure_dir(directory):
 def ensure_directories(dir_list):
     for directory in dir_list:
         ensure_dir(directory)
+    return
+
+
+def create_modification_csv():
+    projects_access_list = []
+
+    projects = [content_dict.get(key) for key in content_dict.keys()]
+
+    for project in projects:
+        pages = [project['pages'].get(key) for key in project['pages'].keys()]
+
+        name = project['title']
+
+        last_render = np.max([int(page['last_render']) for page in pages])
+
+        last_update = np.max([int(page['lastUpdate']) for page in pages])
+
+        last_review = np.max([int(page['last_review']) for page in pages])
+
+        access_dict = {
+            "name": name,
+            "last_render": last_render,
+            "last_update": last_update,
+            "render_delta": last_render - last_update,
+            "last_review": last_review,
+        }
+
+        projects_access_list.append(access_dict)
+
+    df = pd.DataFrame.from_dict(projects_access_list)
+
+    df = df.sort_values(by=['last_render'], ascending=False)
+
+    df.to_csv("../data/review_content/access.csv", index=False)
+
     return
 
 
