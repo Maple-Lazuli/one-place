@@ -19,9 +19,18 @@ page_dict = {
     "lastUpdate": 0,
     "pages": dict(),
     "code_snippets": dict(),
+    "writings": dict(),
     "last_review": 0,
     "score": 0,
-    "editor":""
+    "editor": ""
+}
+
+writing_dict = {
+    "id": None,
+    "title": None,
+    "image_name": "None",
+    "save_data": "",
+    "creation_date": 0
 }
 
 code_snippets_dict = {

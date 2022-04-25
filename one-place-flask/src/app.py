@@ -15,6 +15,9 @@ import nlp_utils as nlp
 import numpy as np
 import pandas as pd
 
+from PIL import Image, ImageOps
+from io import BytesIO
+import base64
 app = Flask(__name__)
 CORS(app)
 content_dict = None
@@ -125,6 +128,9 @@ def delete_project():
                 if id_to_remove in page['code_snippets'].keys():
                     print(f"deleted {id_to_remove}")
                     page['code_snippets'].pop(id_to_remove)
+                if id_to_remove in page['writings'].keys():
+                    print(f"deleted {id_to_remove}")
+                    page['writings'].pop(id_to_remove)
     save_data(content_dict)
     return Response(id_to_remove, status=200, mimetype='application/json')
 
@@ -313,6 +319,68 @@ def update_snippet():
 
 
 """
+Writting Endpoint
+"""
+@app.route("/writing", methods=['GET'])
+def get_writing():
+    global content_dict
+    page_id = request.args.get('pageId')
+    print(page_id)
+    page = find_page(page_id)
+    writing = page['writings'].get(request.args.get('writingId'))
+    return Response(json.dumps({'writing': writing, 'page': page}), status=200, mimetype='application/json')
+
+
+
+@app.route("/writing", methods=['POST'])
+def add_writing():
+    global content_dict
+    page_id = request.json['data']['pageID']
+    page = find_page(page_id)
+    template = copy.deepcopy(cnst.writing_dict)
+    template['title'] = request.json['data']['title']
+    prehash = template['title'] + str(template['creation_date'])
+    template['id'] = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    template['creation_date'] = request.json['data']['creation_date']
+
+    page['writings'].update({template['id']: template})
+
+    # save and format the image from the client
+    # file = request.json['data']['imageData']
+    # im = Image.open(BytesIO(base64.b64decode(file[22:])))
+    # prehash = str(time.time())
+    # file_name = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    # template['image_name'] = file_name
+    # template['save_data'] = request.json['data']['imageSaveData']
+    # # save the file and return the new name to the user
+    # im.save(f"../data/v1/images/{file_name}.png")
+    print(f"Received new writing for {page['title']}")
+    save_data(content_dict)
+    return Response(json.dumps({'writingID': template['id'], 'pageID': page['id']}), status=200, mimetype='application/json')
+
+
+@app.route("/writing", methods=['PUT'])
+def update_writing():
+    global content_dict
+    page_id = request.json['data']['pageID']
+    page = find_page(page_id)
+    writing = page['writings'].get(request.json['data']['writingID'])
+    # save and format the image from the client
+    file = request.json['data']['imageData']
+    im = Image.open(BytesIO(base64.b64decode(file[22:])))
+    prehash = str(time.time())
+    file_name = hashlib.sha256(bytes(prehash, 'utf-8')).hexdigest()
+    writing['image_name'] = file_name
+    writing['save_data'] = request.json['data']['imageSaveData']
+    # save the file and return the new name to the user
+    im.save(f"../data/v1/images/{file_name}.png")
+    print(f"Received update for writing {writing['title']} from {page['title']}")
+    save_data(content_dict)
+    return Response(json.dumps({'writing': writing}), status=200, mimetype='application/json')
+
+
+
+"""
 REVIEW Endpoint
 """
 
@@ -492,6 +560,9 @@ def remove_unlinked_images(content):
         for page_id in project['pages'].keys():
             page = project['pages'].get(page_id)
             content_string += page['content'] if page['content'] is not None else ""
+            # prevent removal of images
+            for key in page['writings'].keys():
+                content_string += key
 
     images = [f for f in os.listdir(cnst.images) if os.path.isfile(os.path.join(cnst.images, f))]
     for image in images:

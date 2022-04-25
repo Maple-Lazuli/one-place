@@ -6,6 +6,6 @@ one-place-web/node_modules/*
 one-place-management/node_modules/*
 one-place-review/node_modules/*
 one-place-doit/node_modules/*
-
+one-place-write/node_modules/*
 
 one-place-flask/src/__pycache__/*

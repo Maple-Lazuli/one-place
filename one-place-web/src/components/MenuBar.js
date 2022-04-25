@@ -51,7 +51,7 @@ class MenuBar extends React.Component {
     render() {
         return (
             <div>
-                <div className="ui secondary  menu" style={{ margin: "2px", zIndex: 10099 }}>
+                <div className="ui secondary  menu" style={{ margin: "2px", zIndex: 10099, height:'3vh' }}>
                 <a className="item" onClick={this.props.toggleBar} >
                         X
                     </a>
