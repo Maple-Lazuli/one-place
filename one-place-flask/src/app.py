@@ -20,9 +20,29 @@ from io import BytesIO
 import base64
 app = Flask(__name__)
 CORS(app)
+
 content_dict = None
 last_save = time.time()
 
+@app.before_first_request
+def run_first():
+    global content_dict
+    dir_list = [
+        "../data",
+        "../data/backups",
+        "../data/review_content",
+        "../data/v1",
+        "../data/v1/files",
+        "../data/v1/images"
+    ]
+    ensure_directories(dir_list)
+    backup()
+    content_dict = read_data()
+    content_dict = verify_keys(content_dict)
+    remove_unlinked_files(content_dict)
+    remove_unlinked_images(content_dict)
+    update_image_links(content_dict)
+    create_review_list(content_dict)
 
 @app.route("/save", methods=["GET"])
 def remote_save():
@@ -35,9 +55,9 @@ def remote_save():
 def remote_backup():
     remove_unlinked_files(content_dict)
     remove_unlinked_images(content_dict)
-    backup()
+    backup_file = backup()
     print("received backup command")
-    return Response("ok", status=200, mimetype='application/json')
+    return Response("Okay", status=200, mimetype='application/json')
 
 
 @app.route("/render", methods=["GET"])
@@ -466,10 +486,14 @@ def backup():
     images = [f for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f))]
     files = [f for f in os.listdir(files_dir) if os.path.isfile(os.path.join(files_dir, f))]
     root = [f for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f))]
-    with zipfile.ZipFile(f"{save_dir}{time.time()}.zip", 'w') as zipf:
+    file_name = f"{save_dir}{time.time()}.zip"
+    with zipfile.ZipFile(file_name, 'w') as zipf:
         [zipf.write(image_dir + f, '/images/' + f) for f in images]
         [zipf.write(files_dir + f, '/files/' + f) for f in files]
         [zipf.write(source_dir + f, '/' + f) for f in root]
+
+    return file_name
+
 
 
 def verify_keys(dictionary):
@@ -666,20 +690,4 @@ def main():
 
 
 if __name__ == "__main__":
-    dir_list = [
-        "../data",
-        "../data/backups",
-        "../data/review_content",
-        "../data/v1",
-        "../data/v1/files",
-        "../data/v1/images"
-    ]
-    ensure_directories(dir_list)
-    backup()
-    content_dict = read_data()
-    content_dict = verify_keys(content_dict)
-    remove_unlinked_files(content_dict)
-    remove_unlinked_images(content_dict)
-    update_image_links(content_dict)
-    create_review_list(content_dict)
     main()
