@@ -1,0 +1,16 @@
+sudo docker build . -f Dockerfile -t lovelylazuli/one-place-flask
+
+sudo docker run -d -v "/home/ada/Desktop/docker/":"/opt/app/data/backups" -p 3001:3001 lovelylazuli/one-place-flask
+
+sudo docker build . -f Dockerfile -t lovelylazuli/one-place-web
+
+sudo docker run -d -p 3000:3000 lovelylazuli/one-place-web
+
+sudo docker build . -f Dockerfile -t lovelylazuli/one-place-writer
+
+sudo docker run -d -p 3003:3003 lovelylazuli/one-place-writer
+
+sudo docker build . -f Dockerfile -t lovelylazuli/one-place-review
+
+sudo docker run -d -p 3002:3002 lovelylazuli/one-place-review
+
