@@ -1,7 +1,6 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import Backend from "../../api/backend"
-import WritingArea from "./WritingArea"
 class CreateWriting extends React.Component {
     state = {
         writingTitle: "",
