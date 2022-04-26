@@ -12,11 +12,20 @@ class WritingArea extends React.Component {
 
 
     getImageURL = () => {
-        if (this.props.currentWriting['id'] == 'None') {
+        if (this.props.currentWriting['image_name'] == 'None') {
             return ""
         } else {
-            return "http://"+ window.location.hostname +":3001/images?image=" + this.props.currentWriting['image_name']
+            return "http://" + window.location.hostname + ":3001/images?image=" + this.props.currentWriting['image_name']
         }
+    }
+
+    clearCanvas = (e) => {
+        this.saveableCanvas.eraseAll();
+
+    }
+
+    loadData = () => {
+        this.saveableCanvas.loadSaveData(this.props.loadData)
     }
 
     render() {
@@ -25,13 +34,17 @@ class WritingArea extends React.Component {
             <div className="pusher" >
 
                 <div>
-                    <div onMouseUp={this.updateData} style={{ 'display': this.props.displayDraw }}>
+                    <div style={{ 'display': this.props.displayDraw }}>
+                        <button className="ui negative small basic button" onClick={this.clearCanvas}>Clear</button>
+                        <button className="ui negative small basic button" onClick={this.loadData}>Load</button>
+                        <button className="ui positive small basic button" onClick={this.updateData}>Send</button>
                         <CanvasDraw
                             ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-                            brushColor={"black"}
-                            backgroundColor={'gold'}
+                            brushColor={"white"}
+                            backgroundColor={"black"}
                             brushRadius={this.props.brushRadius}
                             lazyRadius={this.props.lazyRadius}
+                            loadTimeOffset={1}
                             canvasWidth={window.window.innerWidth}
                             canvasHeight={Math.floor(window.innerHeight * .965)}
                         />

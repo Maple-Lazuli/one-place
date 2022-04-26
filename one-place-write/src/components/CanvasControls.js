@@ -11,7 +11,7 @@ class CanvasControls extends React.Component {
     }
 
     loadData = () => {
-        this.saveableCanvas.loadSaveData(this.props.getImageLoadData)
+        this.props.canvasRef.loadSaveData(this.props.getImageLoadData)
     }
 
     increaseBrushRadius = () => {
@@ -32,11 +32,6 @@ class CanvasControls extends React.Component {
         this.props.mutateLazyRadius(-2)
     }
 
-    sendData = () => {
-        this.props.sendData()
-    }
-
-
     mode = () => {
         if (this.props.displayDraw == ""){
             return "View"
@@ -52,9 +47,7 @@ class CanvasControls extends React.Component {
                 <div>
                     <div>
                         <div className="item">
-                            <button className="ui negative small basic button" onClick={this.clearCanvas}>Clear</button>
                             <button className="ui negative small basic button" onClick={this.props.toggleData}>{this.mode()}</button>
-                            <button className="ui positive small basic button" onClick={this.sendData}>Send</button>
                             
                         </div>
                         <div className="item">

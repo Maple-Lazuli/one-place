@@ -23,11 +23,12 @@ class App extends React.Component {
         pageID: "None",
         writingID: "None",
         brushRadius: 1,
-        lazyRadius: 3,
+        lazyRadius: 1,
         canvasRef: null,
-        color: "black",
+        color: "white",
         displayDraw: "None",
-        displayImage: ""
+        displayImage: "",
+        written: false
     }
 
 
@@ -44,6 +45,7 @@ class App extends React.Component {
             currentPage: response.data['page'],
             currentWriting: response.data['writing']
         }, () => {
+            this.setState({ imageSaveData: this.state.currentWriting['save_data'] })
             if (this.state.currentWriting['image_name'] == "None") {
                 this.setState({ displayDraw: "", displayImage: "None" })
             } else {
@@ -84,9 +86,15 @@ class App extends React.Component {
 
     toggleData = () => {
         if (this.state.displayDraw == "None") {
-            this.setState({ displayDraw: "", displayImage: "None" })
+            this.setState({ displayDraw: "", displayImage: "None" }, () => {
+            })
         } else {
             this.setState({ displayDraw: "None", displayImage: "" })
+            if (this.state.written) {
+                this.sendData()
+            }
+            window.location.reload()
+
         }
     }
 
@@ -109,7 +117,7 @@ class App extends React.Component {
 
 
     updateImageData = (ref, dataURL, saveData) => {
-        this.setState({ canvasRef: ref, imageDataURL: dataURL, imageSaveData: saveData })
+        this.setState({ canvasRef: ref, imageDataURL: dataURL, imageSaveData: saveData, written: true }, () => {this.sendData()})
     }
 
 
@@ -127,13 +135,13 @@ class App extends React.Component {
                         mutateBrushRadius={this.mutateBrushRadius}
                         mutateColor={this.mutateColor}
                         canvasRef={this.state.canvasRef}
-                        sendData={this.sendData}
                         displayDraw={this.state.displayDraw}
                         toggleData={this.toggleData} />
                     <WritingArea brushRadius={this.state.brushRadius}
                         lazyRadius={this.state.lazyRadius}
                         color={this.state.color}
                         updateImageData={this.updateImageData}
+                        loadData={this.state.imageSaveData}
                         mode={this.state.mode}
                         currentWriting={this.state.currentWriting}
                         displayDraw={this.state.displayDraw}
