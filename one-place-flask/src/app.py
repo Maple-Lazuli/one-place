@@ -36,7 +36,6 @@ def run_first():
         "../data/v1/images"
     ]
     ensure_directories(dir_list)
-    backup()
     content_dict = read_data()
     content_dict = verify_keys(content_dict)
     remove_unlinked_files(content_dict)
