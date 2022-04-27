@@ -80,6 +80,7 @@ PROJECT Endpoints
 def get_projects():
     projects = [content_dict.get(key) for key in content_dict.keys()]
     # sort by last render
+
     projects.sort(key=sort_project_key, reverse=True)
 
     return_json = {"projects": projects}
@@ -679,10 +680,11 @@ def create_modification_csv():
 
 def sort_project_key(p):
     pages = [p['pages'].get(key) for key in p['pages'].keys()]
-
-    last_render = np.max([int(page['last_render']) for page in pages])
-
-    return last_render
+    if len(pages) > 0:
+        last_render = np.max([int(page['last_render']) for page in pages])
+        return last_render
+    else:
+        return -1
 
 
 def main():
