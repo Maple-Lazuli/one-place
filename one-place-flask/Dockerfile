@@ -2,8 +2,6 @@ FROM ubuntu
 
 COPY src /opt/app/src
 
-COPY data /opt/app/data
-
 COPY *.txt /opt/app
 
 RUN apt update
