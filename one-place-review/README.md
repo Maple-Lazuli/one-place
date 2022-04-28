@@ -2,7 +2,7 @@
 
 ## Existing Image
 
-To pull and run the existing image on Dockerhub, execute the following in a termnial
+To pull and run the existing image on Dockerhub, execute the following in a terminal
 
 ```shell
 sudo docker run -d -p 3002:3002 lovelylazuli/one-place-review

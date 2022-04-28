@@ -54,6 +54,17 @@ files_dict = {
 data_path = '../data/v1/'
 v1_name = "content.pkl"
 images = data_path + "images/"
+review = "../data/restore/"
 files = data_path + "files/"
 backups = '../data/backups/'
 review_list = "../data/review_content/review.txt"
+
+dir_list = [
+    "../data",
+    "../data/backups",
+    "../data/restore",
+    "../data/review_content",
+    "../data/v1",
+    "../data/v1/files",
+    "../data/v1/images"
+]

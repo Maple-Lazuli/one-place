@@ -73,7 +73,7 @@ class App extends React.Component {
                     <MenuBar updateProject={this.updateProject} updatePage={this.updatePage} currentProject={this.state.currentProject} refreshProject={this.refreshProject} toggleBar={this.toggleBar}/>
                     <ToolBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} refreshPage={this.refreshPage} refreshProject={this.refreshProject} />
                 </div>
-                <div id="appArea" className="ui bottom attached segment pushable" style={{ height: "94vh", width: "100%" }}>
+                <div id="appArea" className="ui bottom attached segment pushable" style={{ height: "91vh", width: "100%" }}>
                     <ProjectBar currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePage={this.updatePage} bar={this.state.bar}/>
                     <PageContent currentProject={this.state.currentProject} currentPage={this.state.currentPage} updatePageTime={this.updatePageTime} lastUpdate={this.state.lastUpdate} />
 

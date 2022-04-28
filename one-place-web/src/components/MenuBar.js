@@ -2,12 +2,14 @@ import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import ProjectOverlay from './projects/ProjectOverlay';
 import PagesOverlay from './pages/PageOverlay';
+import RestoreOverlay from './restore/RestoreOverlay';
 import Backend from '../api/backend';
 class MenuBar extends React.Component {
 
     state = {
         overlay: "None",
-        pageoverlay: "None"
+        pageoverlay: "None",
+        restoreOverlay: "None"
     }
 
     toggleProjectsOverlay = () => {
@@ -15,6 +17,14 @@ class MenuBar extends React.Component {
             this.setState({ overlay: "" })
         } else {
             this.setState({ overlay: "None" })
+        }
+    }
+
+    toggleRestoreOverlay = () => {
+        if (this.state.restoreOverlay === "None") {
+            this.setState({ restoreOverlay: "" })
+        } else {
+            this.setState({ restoreOverlay: "None" })
         }
     }
 
@@ -30,6 +40,8 @@ class MenuBar extends React.Component {
         }
 
     }
+
+
 
     sendSaveCommand = async () => {
         const response = await Backend.get(
@@ -51,33 +63,20 @@ class MenuBar extends React.Component {
     render() {
         return (
             <div>
-                <div className="ui secondary  menu" style={{ margin: "2px", zIndex: 10099, height:'3vh' }}>
-                <a className="item" onClick={this.props.toggleBar} >
+                <div className="ui secondary  menu" style={{ margin: "2px", zIndex: 10099, height: '2vh' }}>
+                    <a className="item" onClick={this.props.toggleBar} >
                         X
                     </a>
-                <a className="item" onClick={this.toggleProjectsOverlay} >
+                    <a className="item" onClick={this.toggleProjectsOverlay} >
                         Projects
                     </a>
                     <a className="item" onClick={this.togglePagesOverlay} >
                         Pages
                     </a>
-                    {/* Update these to be links not apps */}
-                    <a className="item">
-                        Calendar
-                    </a>
-                    <a className="item">
-                        To Do
-                    </a>
-                    <a className="item">
-                        Review Metrics
-                    </a>
                     <div className="right menu">
-                        <div className="item">
-                            <div className="ui icon input">
-                                <input type="text" placeholder="Search..." />
-                                <i className="search link icon"></i>
-                            </div>
-                        </div>
+                        <a className="item" onClick={this.toggleRestoreOverlay} >
+                            Restore
+                        </a>
                         <a className="ui item" onClick={this.sendSaveCommand}>
                             Save
                         </a>
@@ -86,7 +85,7 @@ class MenuBar extends React.Component {
                         </a>
                         <div className='item'>
                             <b>
-                                v1.0
+                                v1.5
                             </b>
 
                         </div>
@@ -94,6 +93,8 @@ class MenuBar extends React.Component {
                 </div>
                 <ProjectOverlay overlay={this.state.overlay} updateProject={this.props.updateProject} toggleProjectsOverlay={this.toggleProjectsOverlay} />
                 <PagesOverlay overlay={this.state.pageoverlay} currentProject={this.props.currentProject} updatePage={this.props.updatePage} refreshProject={this.props.refreshProject} />
+                <RestoreOverlay overlay={this.state.restoreOverlay}/>
+
             </div>
         )
     }

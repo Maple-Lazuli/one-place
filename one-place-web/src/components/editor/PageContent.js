@@ -57,7 +57,7 @@ class PageContent extends React.Component {
         this.pullDivContent()
         this.updateDivContent()
 
-        setTimeout(this.timers, 2000)
+        setTimeout(this.timers, 1000)
     }
 
     pullDivContent = async () => {

@@ -14,7 +14,7 @@ import constants as cnst
 import nlp_utils as nlp
 import numpy as np
 import pandas as pd
-
+import shutil
 from PIL import Image, ImageOps
 from io import BytesIO
 import base64
@@ -27,15 +27,7 @@ last_save = time.time()
 @app.before_first_request
 def run_first():
     global content_dict
-    dir_list = [
-        "../data",
-        "../data/backups",
-        "../data/review_content",
-        "../data/v1",
-        "../data/v1/files",
-        "../data/v1/images"
-    ]
-    ensure_directories(dir_list)
+    ensure_directories(cnst.dir_list)
     content_dict = read_data()
     content_dict = verify_keys(content_dict)
     remove_unlinked_files(content_dict)
@@ -258,6 +250,27 @@ def save_file():
     return Response(json.dumps({'file': file_name}), status=200, mimetype='application/json')
 
 
+@app.route("/restore", methods=["POST"])
+def restore_backup():
+    backup()
+    make_clean_dir(cnst.review)
+    global content_dict
+    file = request.files['file']
+    file.save(os.path.join(cnst.review, file.filename))
+    make_clean_dir(cnst.data_path)
+    with zipfile.ZipFile(f'{cnst.review}/{file.filename}', 'r') as zip_ref:
+        zip_ref.extractall(cnst.data_path)
+    ensure_directories(cnst.dir_list)
+    content_dict = read_data()
+    content_dict = verify_keys(content_dict)
+    remove_unlinked_files(content_dict)
+    remove_unlinked_images(content_dict)
+    update_image_links(content_dict)
+    create_review_list(content_dict)
+    print(f"received and restore command")
+    return Response("okay", status=200, mimetype='application/json')
+
+
 @app.route("/files", methods=["GET"])
 def get_file():
     print(request.args.get('project_id'))
@@ -289,6 +302,7 @@ def get_image():
     return send_file(cnst.images + image_name + '.png', mimetype='image/png')
 
 
+# This is the endpoint to use for data analysis of review
 @app.route("/reviewcsv", methods=["GET"])
 def get_csv():
     create_modification_csv()
@@ -685,6 +699,21 @@ def sort_project_key(p):
     else:
         return -1
 
+def make_clean_dir(directory):
+    """
+    Clears the directory for re-writing
+
+    Parameters
+    ----------
+    directory: The directory to purge
+
+    Returns
+    -------
+    None
+    """
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+    os.makedirs(directory)
 
 def main():
     app.run(host='0.0.0.0', port=3001)

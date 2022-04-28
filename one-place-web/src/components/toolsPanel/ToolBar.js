@@ -40,7 +40,7 @@ class ToolBar extends React.Component {
     render() {
         return (
             <div style={{ backgroundColor: 'gold' }}>
-                <div className="ui secondary menu" style={{ margin: "2px", zIndex: 10099, height:'3vh' }}>
+                <div className="ui secondary menu" style={{ margin: "2px", zIndex: 10099, height:'2vh' }}>
                     <a className="item" onClick={this.toggleSnippetsOverlay} >
                         Code Snippets
                     </a>

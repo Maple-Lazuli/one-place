@@ -2,13 +2,9 @@
 
 ## Existing Image
 
-To pull and run the existing image on Dockerhub, execute the following in a termnial
+To pull and run the existing image on Dockerhub, execute the following in a terminal
 ```shell
-sudo docker run -d -v "<place to store backups":"/opt/app/data/backups" -p 3001:3001 lovelylazuli/one-place-flask
-```
-or 
-```shell
-sudo docker run -d -v "<place to store backups>":"/opt/app/data/backups" -p 3001:3001 lovelylazuli/one-place-flask-public
+sudo docker run -d -v "<place to store backups":"/opt/app/data/backups" -p 3001:3001  --hostname lovelylazuli/one-place-flask
 ```
 
 ## Rebuild
