@@ -47,8 +47,9 @@ def remote_backup():
     remove_unlinked_files(content_dict)
     remove_unlinked_images(content_dict)
     backup_file = backup()
-    print("received backup command")
-    return Response("Okay", status=200, mimetype='application/json')
+    print(f"received backup command, created {backup_file}")
+    return send_file(backup_file)
+    #return Response("Okay", status=200, mimetype='application/json')
 
 
 @app.route("/render", methods=["GET"])

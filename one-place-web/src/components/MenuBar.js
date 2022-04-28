@@ -51,14 +51,6 @@ class MenuBar extends React.Component {
         if (response.status !== 200) {
         }
     }
-    sendBackupCommand = async () => {
-        const response = await Backend.get(
-            '/backup', {
-            params: {}
-        });
-        if (response.status !== 200) {
-        }
-    }
 
     render() {
         return (
@@ -80,7 +72,7 @@ class MenuBar extends React.Component {
                         <a className="ui item" onClick={this.sendSaveCommand}>
                             Save
                         </a>
-                        <a className="ui item" onClick={this.sendBackupCommand}>
+                        <a className="ui item" href={"http://" +   window.location.hostname+ ":3001/backup"}>
                             Backup
                         </a>
                         <div className='item'>
