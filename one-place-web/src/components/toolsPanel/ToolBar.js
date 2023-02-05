@@ -47,12 +47,12 @@ class ToolBar extends React.Component {
                     <a className="item" onClick={this.toggleFilesOverlay}>
                         File Storage
                     </a>
-                    <a className="item" onClick={this.toggleWritingsOverlay}>
+                    {/* <a className="item" onClick={this.toggleWritingsOverlay}>
                         Write
                     </a>
                     <a href={"http://"+window.location.hostname+":3002"}  className="item">
                         Review
-                    </a>
+                    </a> */}
                     <div className="right menu">
                         <div className='item'>
                             <b>
