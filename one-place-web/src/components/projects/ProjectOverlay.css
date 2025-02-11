@@ -29,6 +29,8 @@
 #access-projects-div{
     height:90%;
     padding: 10px;
-    overflow: auto;
-    
+    overflow-y: auto !important;
+}
+#projectbar{
+    overflow-y: auto !important;
 }

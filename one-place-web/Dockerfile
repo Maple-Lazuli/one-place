@@ -20,6 +20,8 @@ RUN apt install npm -y
 
 RUN npm install -g n
 
+RUN n 12.22.9
+
 RUN PATH="$PATH"
 
 WORKDIR /opt/app/

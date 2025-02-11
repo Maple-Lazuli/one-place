@@ -3,7 +3,7 @@
     height: 100%;
     overflow: "visible" !important;
     font-size: medium;
-    color: black;
+    color: rgb(0, 0, 0);
     font-family: "Lato";
     padding: 4px !important;
 }
@@ -12,8 +12,7 @@
     width: 100% !important;
     height: 100% !important;
     overflow: "visible" !important;
-    color: white !important;
-    opacity: .85 !important;
+    color: rgba(21, 255, 0, 0.822) !important;
     font-size: medium !important;
     padding: 4px !important;
     

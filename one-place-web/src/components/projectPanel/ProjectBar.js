@@ -19,7 +19,6 @@ class ProjectBar extends React.Component {
     }
 
     displayType = () => {
-        console.log("toggle")
         if (this.props.bar == "visible"){
             this.setState({class: "ui visible inverted left vertical sidebar menu"})
         } else {
