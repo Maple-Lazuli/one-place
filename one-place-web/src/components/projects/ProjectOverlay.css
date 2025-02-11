@@ -1,5 +1,5 @@
 .shader{
-    background-color: rgba(112, 108, 53, 0.4);
+    background-color: rgba(112, 108, 53, 0.0);
     position: fixed;
     left: 50%;
     top: 50%;
@@ -10,7 +10,7 @@
 }
 
 .projectholder{
-    background-color: rgba(201, 192, 29, 0.63);
+    background-color: rgba(49, 201, 29, 0.247);
     position: fixed;
     left: 50%;
     top: 50%;
@@ -33,4 +33,21 @@
 }
 #projectbar{
     overflow-y: auto !important;
+    background-color: black;
+    border-right: 2px solid rgba(255, 255, 255, 0.822) !important;
+}
+
+.CurrentProject{
+    color: rgba(21, 255, 0, 0.822) !important;
+    padding-top: 5px;
+}
+
+.content .header{
+    color: rgba(21, 255, 0, 0.822) !important;
+}
+.content .meta {
+    color: rgba(21, 255, 0, 0.37) !important;
+}
+.content .description {
+    color: rgba(21, 255, 0, 0.822) !important;
 }

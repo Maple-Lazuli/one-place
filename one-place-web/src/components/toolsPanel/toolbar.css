@@ -22,14 +22,14 @@
 }
 
 .snippets{
-    background-color: rgba(238, 255, 0, 0.4);
+    background-color: rgba(49, 201, 29, 0.247);
     overflow-y: auto !important;
 }
 
 .files{
-    background-color: rgba(189, 119, 28, 0.534);
+    background-color: rgba(49, 201, 29, 0.247);
     overflow-y: auto !important;
 }
 .writings{
-    background-color: rgba(100, 34, 221, 0.534);
+    background-color: rgba(49, 201, 29, 0.247);
 }
